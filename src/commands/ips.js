@@ -3,14 +3,14 @@ const { File } = require('../helper/GetFileFromGitlab');
 const { Logger, Level } = require('../helper/Logger');
 const { readFileSync, statSync } = require('fs');
 const path = require('path');
-const { ServersFile } = require('../helper/ServerFile');
+const { GitLabFile } = require('../helper/EnsureFileSync');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ips')
         .setDescription('Shows the ips of all our servers.'),
     async execute(interaction) {
-        await ServersFile.serve(interaction);
+        await GitLabFile.serve(interaction, 'servers.json');
         const serversPath = path.join(__dirname, '..', '..', 'assets', 'servers.json');
 
         const serversJson = JSON.parse(readFileSync(serversPath).toString());

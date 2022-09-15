@@ -3,18 +3,18 @@ const { File } = require('./GetFileFromGitlab');
 const { existsSync, readFileSync, writeFileSync } = require('fs');
 const { Logger, Level } = require('./Logger');
 
-module.exports.ServersFile = {
-    serve: async (interaction) => {
-        const serversPath = path.join(__dirname, '..', '..', 'assets', 'servers.json');
+module.exports.GitLabFile = {
+    serve: async (interaction, fileName) => {
+        const filePath = path.join(__dirname, '..', '..', 'assets', fileName);
         try {
-            const file = await File.get('servers.json');
+            const file = await File.get(fileName);
             const json = JSON.parse(file);
-            if (!existsSync(serversPath) || JSON.stringify(JSON.parse(readFileSync(serversPath))) !== JSON.stringify(json)) {
-                writeFileSync(serversPath, JSON.stringify(json, null, 2));
+            if (!existsSync(filePath) || JSON.stringify(JSON.parse(readFileSync(filePath))) !== JSON.stringify(json)) {
+                writeFileSync(filePath, JSON.stringify(json, null, 2));
             }
         } catch (err) {
-            await interaction.reply('Error fetching servers.json');
-            await Logger.log('Error fetching servers.json: Invalid JSON', Level.ERROR);
+            await interaction.reply(`Error fetching ${fileName}`);
+            await Logger.log(`Error fetching ${fileName}: Invalid JSON`, Level.ERROR);
         }
     },
 };
