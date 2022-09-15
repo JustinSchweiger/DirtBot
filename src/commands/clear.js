@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const Logger = require('../helper/Logger');
+const { Logger, Level } = require('../helper/Logger');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,7 +23,7 @@ module.exports = {
             return;
         }
 
-        await Logger.log(`${interaction.user} has cleared **${amount}** messages in ${interaction.channel}.`, Logger.level.warning);
+        await Logger.log(`${interaction.user} has cleared **${amount}** messages in ${interaction.channel}.`, Level.WARNING);
         await interaction.channel.bulkDelete(amount);
         await interaction.reply({ content: `Cleared ${amount} messages.`, ephemeral: true });
     },

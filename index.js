@@ -1,10 +1,9 @@
-require('dotenv').config();
 require('colors');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { Client, IntentsBitField, Collection } = require('discord.js');
 const { Gitlab } = require('@gitbeaker/node');
-const fs = require('fs');
+const { readdirSync } = require('fs');
 const path = require('path');
 
 const client = new Client({
@@ -15,19 +14,19 @@ const client = new Client({
     ],
 });
 
-const api = new Gitlab({
+const gitlab = new Gitlab({
     token: process.env.ACCESS_TOKEN,
 });
 
 // Export client and gitlab api for other files to use
-module.exports.Api = api;
+module.exports.GitLab = gitlab;
 module.exports.Client = client;
 
 const commands = [];
 client.commands = new Collection();
 
 const commandsPath = path.join(__dirname, 'src/commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 console.log(`Loading ${commandFiles.length} commands...`.yellow);
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);

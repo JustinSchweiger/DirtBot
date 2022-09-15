@@ -1,7 +1,7 @@
-const { Api } = require('../../index');
+const { GitLab } = require('../../index');
 
 module.exports.File = {
     async get(path) {
-        return await Api.RepositoryFiles.showRaw(process.env.PROJECT_ID, path, 'main');
+        return await GitLab.RepositoryFiles.showRaw(process.env.PROJECT_ID, path, 'main');
     },
 };
