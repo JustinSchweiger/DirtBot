@@ -9,7 +9,10 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('maps')
         .setDescription('Shows a list of old maps that can be downloaded.'),
-    execute: async function(interaction) {
+    extra: {
+        hidden: false,
+    },
+    async execute(interaction) {
         await GitLabFile.serve(interaction, 'maps.json');
         const mapsPath = path.join(__dirname, '..', '..', 'assets', 'maps.json');
 

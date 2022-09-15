@@ -9,6 +9,9 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('ips')
         .setDescription('Shows the ips of all our servers.'),
+    extra: {
+        hidden: false,
+    },
     async execute(interaction) {
         await GitLabFile.serve(interaction, 'servers.json');
         const serversPath = path.join(__dirname, '..', '..', 'assets', 'servers.json');

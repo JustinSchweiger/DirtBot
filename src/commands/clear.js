@@ -4,13 +4,16 @@ const { Logger, Level } = require('../helper/Logger');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('clear')
-        .setDescription('Clear a specified amount of messages in the channel. THis can not be undone!')
+        .setDescription('Clear a specified amount of messages in the channel.')
         .addIntegerOption(
             option => option
                 .setName('amount')
                 .setDescription('The amount of messages to clear.')
                 .setRequired(true),
         ),
+    extra: {
+        hidden: false,
+    },
     async execute(interaction) {
         const amount = interaction.options.getInteger('amount');
         if (amount < 1) {

@@ -55,6 +55,9 @@ module.exports = {
                 .setDescription('The channel in which to send the info embed.')
                 .setRequired(true),
         ),
+    extra: {
+        hidden: false,
+    },
     async execute(interaction) {
         const channelIds = {
             'botLogChannel': interaction.options.getChannel('bot-log').id,

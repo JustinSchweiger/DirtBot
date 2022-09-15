@@ -9,6 +9,9 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('versions')
         .setDescription('Shows the versions of all our servers.'),
+    extra: {
+        hidden: false,
+    },
     execute: async function(interaction) {
         await GitLabFile.serve(interaction, 'servers.json');
         const serversPath = path.join(__dirname, '..', '..', 'assets', 'servers.json');

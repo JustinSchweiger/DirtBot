@@ -9,6 +9,9 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('vote')
         .setDescription('Shows the vote links.'),
+    extra: {
+        hidden: false,
+    },
     execute: async function(interaction) {
         await GitLabFile.serve(interaction, 'vote.json');
         const votePath = path.join(__dirname, '..', '..', 'assets', 'vote.json');
