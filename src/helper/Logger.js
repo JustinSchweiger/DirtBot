@@ -6,11 +6,11 @@ module.exports.Logger = {
         const logChannelId = require('../config/log-channel.json');
         const logChannel = await Client.channels.fetch(logChannelId);
         let color = '';
-        if (level === this.Level.INFO) {
+        if (level === 'INFO') {
             color = '#00a1cb';
-        } else if (level === this.Level.WARNING) {
+        } else if (level === 'WARNING') {
             color = '#ffff00';
-        } else if (level === this.Level.ERROR) {
+        } else if (level === 'ERROR') {
             color = '#df0000';
         }
 
@@ -22,7 +22,7 @@ module.exports.Logger = {
 };
 
 module.exports.Level = {
-    INFO: 'Info',
-    WARNING: 'Warning',
-    ERROR: 'Error',
+    INFO: 'INFO',
+    WARNING: 'WARNING',
+    ERROR: 'ERROR',
 };
