@@ -35,6 +35,7 @@ export class LoadCommands {
         }
 
         await RegisterExtraCommands.ticketNotifications();
+        await RegisterExtraCommands.support();
 
         const guild_ids = Client.guilds.cache.map(guild => guild.id);
         const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
