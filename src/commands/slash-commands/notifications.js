@@ -1,4 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { EmbedBuilder } from 'discord.js';
+import { readFileSync, writeFileSync } from 'fs';
+import { resolve } from 'path';
+import { Extra } from '../../helper/Extra.js';
 import { File } from '../../helper/GetFileFromGitlab.js';
 
 export default {
@@ -62,5 +66,86 @@ export default {
     },
     async execute(interaction) {
         console.log(interaction.options);
+        const subcommand = interaction.options.getSubcommand();
+        const target = interaction.options.getUser('target');
+        const extra = await Extra.get();
+        const ticketNotifications = JSON.parse(await File.get('ticket-notifications.json'));
+
+        const enabled = [];
+        if (subcommand === 'list') {
+            for (const ticketNotification of ticketNotifications) {
+                const fileContent = JSON.parse(readFileSync(resolve(`./ticket-notifications/${ticketNotification['short']}.json`)).toString());
+                if (fileContent.includes(target.id)) {
+                    enabled.push({
+                        name: ticketNotification['name'],
+                        emoji: `<:${ticketNotification['emoji']['name']}:${ticketNotification['emoji']['id']}>`,
+                    });
+                }
+            }
+
+            if (enabled.length === 0) {
+                interaction.reply({ content: `${extra['bulletpoint']} ${target} has no ticket notifications enabled.`, ephemeral: true });
+                return;
+            }
+
+            const list = [
+                {
+                    name: '__Enabled Notifications__',
+                    value: enabled.map(notification => `${notification['emoji']} ${notification['name']}`).join('\n'),
+                    inline: true,
+                },
+            ];
+
+            const embed = new EmbedBuilder()
+                .setColor('#df0000')
+                .setTitle(`${extra['bulletpoint']} Ticket Notifications ${extra['bulletpoint']}`)
+                .setDescription(`Ticket notifications for ${target}`)
+                .addFields(list)
+                .setFooter({
+                    text: 'Use the add or remove subcommand to add/remove notifications!',
+                    iconURL: extra['footer-icon'],
+                });
+
+            interaction.reply({ embeds: [embed], ephemeral: true });
+        } else if (subcommand === 'add') {
+            const notification = interaction.options.getString('notification');
+            const ticketNotification = ticketNotifications.find(notif => notif['short'] === notification);
+            const fileContent = JSON.parse(readFileSync(resolve(`./ticket-notifications/${notification}.json`)).toString());
+            if (fileContent.includes(target.id)) {
+                interaction.reply({ content: 'This user already has this notification enabled!', ephemeral: true });
+            } else {
+                fileContent.push(target.id);
+                const embed = new EmbedBuilder()
+                    .setColor('#df0000')
+                    .setTitle(`${extra['bulletpoint']} Notification Added ${extra['bulletpoint']}`)
+                    .setDescription(`Successfully added <:${ticketNotification['emoji']['name']}:${ticketNotification['emoji']['id']}> ${ticketNotification['name']} to ${target}`)
+                    .setFooter({
+                        text: 'Use the add or remove subcommand to add/remove notifications!',
+                        iconURL: extra['footer-icon'],
+                    });
+                interaction.reply({ embeds: [embed], ephemeral: true });
+                writeFileSync(resolve(`./ticket-notifications/${notification}.json`), JSON.stringify(fileContent));
+            }
+        } else if (subcommand === 'remove') {
+            const notification = interaction.options.getString('notification');
+            const ticketNotification = ticketNotifications.find(notif => notif['short'] === notification);
+            const fileContent = JSON.parse(readFileSync(resolve(`./ticket-notifications/${notification}.json`)).toString());
+            if (fileContent.includes(target.id)) {
+                fileContent.splice(fileContent.indexOf(target.id), 1);
+
+                const embed = new EmbedBuilder()
+                    .setColor('#df0000')
+                    .setTitle(`${extra['bulletpoint']} Notification Removed ${extra['bulletpoint']}`)
+                    .setDescription(`Successfully removed <:${ticketNotification['emoji']['name']}:${ticketNotification['emoji']['id']}> ${ticketNotification['name']} from ${target}`)
+                    .setFooter({
+                        text: 'Use the add or remove subcommand to add/remove notifications!',
+                        iconURL: extra['footer-icon'],
+                    });
+                interaction.reply({ embeds: [embed], ephemeral: true });
+                writeFileSync(resolve(`./ticket-notifications/${notification}.json`), JSON.stringify(fileContent));
+            } else {
+                interaction.reply({ content: 'This user does not have this notification enabled!', ephemeral: true });
+            }
+        }
     },
 };

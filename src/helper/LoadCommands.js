@@ -1,4 +1,5 @@
 import { REST } from '@discordjs/rest';
+import chalk from 'chalk';
 import { Routes } from 'discord-api-types/v10';
 import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
@@ -15,7 +16,7 @@ export class LoadCommands {
 
         const commandsPath = joinPath(__dirname, 'src', 'commands', 'slash-commands');
         const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-        console.log(`Registering ${commandFiles.length} commands ...`);
+        console.log(chalk.yellow(`Registering ${commandFiles.length} commands ...`));
         await Logger.log(`Registering ${commandFiles.length} commands ...`, Level.INFO);
         for (const file of commandFiles) {
             const filePath = joinPath(__fileName, '..', 'src', 'commands', 'slash-commands', file);
@@ -41,7 +42,7 @@ export class LoadCommands {
             rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId),
                 { body: commands })
                 .then(async () => {
-                    console.log('Commands successfully registered.');
+                    console.log(chalk.green('Commands successfully registered.'));
                     await Logger.log('Commands successfully registered.', Level.INFO);
                 })
                 .catch((err) => {
