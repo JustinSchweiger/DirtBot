@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { EmbedBuilder } = require('discord.js');
-const { File } = require('../helper/GetFileFromGitlab');
-const { Logger, Level } = require('../helper/Logger');
+const { Extra } = require('../../helper/Extra');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -34,13 +33,7 @@ module.exports = {
             },
         ];
 
-        let extra;
-        try {
-            extra = JSON.parse(await File.get('extra.json'));
-        } catch (err) {
-            await Logger.log('Error fetching extra.json', Level.ERROR);
-            return;
-        }
+        const extra = await Extra.get();
 
         const embed = new EmbedBuilder()
             .setColor('#df0000')
