@@ -1,11 +1,11 @@
-const { ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { File } = require('../../helper/GetFileFromGitlab');
-const { TicketNotificationFiles } = require('../../helper/TicketNotificationFiles');
-const { readFileSync, writeFileSync } = require('fs');
-const path = require('path');
-const { Extra } = require('../../helper/Extra');
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { readFileSync, writeFileSync } from 'fs';
+import { resolve } from 'path';
+import { Extra } from '../../helper/Extra.js';
+import { File } from '../../helper/GetFileFromGitlab.js';
+import { TicketNotificationFiles } from '../../helper/TicketNotificationFiles.js';
 
-module.exports = {
+export default {
     extra: {
         hidden: true,
     },
@@ -42,7 +42,7 @@ module.exports = {
                 },
                 {
                     name: '\u200b',
-                    value: `<@&${JSON.parse(readFileSync(path.join(__dirname, '..', '..', 'config', 'roles.json'))).admin}> users will also get pinged when the ticket is set to admin level!`,
+                    value: `<@&${JSON.parse(readFileSync(resolve('./src/config/roles.json'))).admin}> users will also get pinged when the ticket is set to admin level!`,
                     inline: false,
                 },
             ])
@@ -50,7 +50,7 @@ module.exports = {
             .setTimestamp();
     },
     async execute(interaction) {
-        const filePath = path.join(__dirname, '..', '..', '..', 'ticket-notifications');
+        const filePath = resolve('./ticket-notifications');
         const ticketNotifications = JSON.parse(await File.get('ticket-notifications.json'));
         await TicketNotificationFiles.serve(ticketNotifications);
 
@@ -75,8 +75,7 @@ module.exports = {
             const addedEmbed = new EmbedBuilder()
                 .setColor('#df0000')
                 .setTitle(`${extra['bulletpoint']} Added ${extra['bulletpoint']}`)
-                .setDescription(`<:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['name']}:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['id']}> **${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['name']}**`)
-                .setTimestamp();
+                .setDescription(`<:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['name']}:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['id']}> **${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['name']}**`);
             await interaction.reply({ embeds: [addedEmbed], ephemeral: true });
             return;
         }
@@ -84,8 +83,7 @@ module.exports = {
         const removedEmbed = new EmbedBuilder()
             .setColor('#df0000')
             .setTitle(`${extra['bulletpoint']} Removed ${extra['bulletpoint']}`)
-            .setDescription(`<:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['name']}:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['id']}> **${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['name']}**`)
-            .setTimestamp();
+            .setDescription(`<:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['name']}:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['id']}> **${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['name']}**`);
         await interaction.reply({ embeds: [removedEmbed], ephemeral: true });
     },
 };

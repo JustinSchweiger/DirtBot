@@ -1,11 +1,11 @@
-const path = require('path');
-const { File } = require('./GetFileFromGitlab');
-const { existsSync, readFileSync, writeFileSync } = require('fs');
-const { Logger, Level } = require('./Logger');
+import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { resolve } from 'path';
+import { File } from './GetFileFromGitlab.js';
+import { Level, Logger } from './Logger.js';
 
-module.exports.GitLabFile = {
-    serve: async (interaction, fileName) => {
-        const filePath = path.join(__dirname, '..', '..', 'assets', fileName);
+export class GitLabFile {
+    static async serve(interaction, fileName) {
+        const filePath = resolve('./assets/' + fileName);
         try {
             const file = await File.get(fileName);
             const json = JSON.parse(file);
@@ -16,5 +16,5 @@ module.exports.GitLabFile = {
             await interaction.reply(`Error fetching ${fileName}`);
             await Logger.log(`Error fetching ${fileName}: Invalid JSON`, Level.ERROR);
         }
-    },
-};
+    }
+}

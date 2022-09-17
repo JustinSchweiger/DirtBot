@@ -1,10 +1,10 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { readFileSync, statSync } = require('fs');
-const path = require('path');
-const { GitLabFile } = require('../../helper/EnsureFileSync');
-const { Extra } = require('../../helper/Extra');
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { readFileSync, statSync } from 'fs';
+import { resolve } from 'path';
+import { GitLabFile } from '../../helper/EnsureFileSync.js';
+import { Extra } from '../../helper/Extra.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('ips')
         .setDescription('Shows the ips of all our servers.'),
@@ -13,7 +13,7 @@ module.exports = {
     },
     async execute(interaction) {
         await GitLabFile.serve(interaction, 'servers.json');
-        const serversPath = path.join(__dirname, '..', '..', 'assets', 'servers.json');
+        const serversPath = resolve('./assets/servers.json');
 
         const serversJson = JSON.parse(readFileSync(serversPath).toString());
         const stats = statSync(serversPath);

@@ -1,7 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Logger, Level } = require('../../helper/Logger');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { Level, Logger } from '../../helper/Logger.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Clear a specified amount of messages in the channel.')

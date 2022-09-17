@@ -1,8 +1,8 @@
-const { File } = require('./GetFileFromGitlab');
-const { Logger, Level } = require('./Logger');
+import { File } from './GetFileFromGitlab.js';
+import { Level, Logger } from './Logger.js';
 
-module.exports.Extra = {
-    async get() {
+export class Extra {
+    static async get() {
         let extra;
         try {
             extra = JSON.parse(await File.get('extra.json'));
@@ -12,5 +12,5 @@ module.exports.Extra = {
         }
 
         return extra;
-    },
-};
+    }
+}

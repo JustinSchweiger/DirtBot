@@ -1,12 +1,12 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Logger } = require('../../helper/Logger');
-const { writeFileSync, existsSync } = require('fs');
-const { EmbedBuilder } = require('discord.js');
-const { Setup } = require('../../helper/Setup');
-const { Extra } = require('../../helper/Extra');
-const path = require('path');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { EmbedBuilder } from 'discord.js';
+import { existsSync, writeFileSync } from 'fs';
+import { resolve } from 'path';
+import { Extra } from '../../helper/Extra.js';
+import { Logger } from '../../helper/Logger.js';
+import { Setup } from '../../helper/Setup.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('setup')
         .setDescription('Setup the bot.')
@@ -67,6 +67,11 @@ module.exports = {
                         .setRequired(true),
                 ).addChannelOption(
                     option => option
+                        .setName('quick-support')
+                        .setDescription('The forum for quick support.')
+                        .setRequired(true),
+                ).addChannelOption(
+                    option => option
                         .setName('punishment-appeals')
                         .setDescription('The channel in which to send the punishment appeals embed.')
                         .setRequired(true),
@@ -92,19 +97,19 @@ module.exports = {
     },
     async execute(interaction) {
         if (interaction.options.getSubcommand() === 'messages') {
-            if (!existsSync(path.join(__dirname, '..', '..', 'config', 'channels.json'))) {
+            if (!existsSync(resolve('./src/config/channels.json'))) {
                 interaction.reply({ content: 'Please run `/setup channels` first!', ephemeral: true });
                 return;
             }
 
-            if (!existsSync(path.join(__dirname, '..', '..', 'config', 'roles.json'))) {
+            if (!existsSync(resolve('./src/config/roles.json'))) {
                 interaction.reply({ content: 'Please run `/setup roles` first!', ephemeral: true });
                 return;
             }
 
             await interaction.deferReply({ ephemeral: true });
             await Setup.importantChannels();
-            await interaction.editReply({ content: 'All messages have been send in their respective channels.', ephemeral: true });
+            await interaction.editReply({ content: ':white_check_mark: All messages have been send in their respective channels.', ephemeral: true });
         } else if (interaction.options.getSubcommand() === 'roles') {
             const roles = {
                 staff: interaction.options.getRole('staff').id,
@@ -112,7 +117,7 @@ module.exports = {
                 manager: interaction.options.getRole('manager').id,
             };
 
-            writeFileSync(path.join(__dirname, '..', '..', 'config', 'roles.json'), JSON.stringify(roles, null, 2));
+            writeFileSync(resolve('./src/config/roles.json'), JSON.stringify(roles, null, 2));
             const extra = await Extra.get();
             const fields = [
                 {
@@ -142,7 +147,7 @@ module.exports = {
 
             await Logger.logEmbed(embed);
 
-            interaction.reply({ content: 'The roles have been set!', ephemeral: true });
+            interaction.reply({ content: ':white_check_mark: The roles have been set!', ephemeral: true });
         } else if (interaction.options.getSubcommand() === 'channels') {
             const channelIds = {
                 'botLogChannel': interaction.options.getChannel('bot-log').id,
@@ -150,13 +155,14 @@ module.exports = {
                 'appealLogChannel': interaction.options.getChannel('appeal-log').id,
                 'ticketNotificationsChannel': interaction.options.getChannel('ticket-notifications').id,
                 'supportChannel': interaction.options.getChannel('support').id,
+                'quickSupportChannel': interaction.options.getChannel('quick-support').id,
                 'punishmentAppealsChannel': interaction.options.getChannel('punishment-appeals').id,
                 'verificationChannel': interaction.options.getChannel('verification').id,
                 'roleAssignmentChannel': interaction.options.getChannel('role-assignment').id,
                 'infoChannel': interaction.options.getChannel('info').id,
             };
 
-            writeFileSync(path.join(__dirname, '..', '..', 'config', 'channels.json'), JSON.stringify(channelIds, null, 2));
+            writeFileSync(resolve('./src/config/channels.json'), JSON.stringify(channelIds, null, 2));
             const extra = await Extra.get();
 
             const fields = [
@@ -187,7 +193,7 @@ module.exports = {
 
             await Logger.logEmbed(embed);
 
-            await interaction.reply({ content: 'Successfully set all channels.', ephemeral: true });
+            await interaction.reply({ content: ':white_check_mark: Successfully set all channels.', ephemeral: true });
         }
     },
 };

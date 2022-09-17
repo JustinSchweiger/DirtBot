@@ -1,11 +1,8 @@
-require('colors');
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
-const { Client, IntentsBitField, Collection } = require('discord.js');
-const { Gitlab } = require('@gitbeaker/node');
-const { readdirSync } = require('fs');
-const path = require('path');
-const { RegisterExtraCommands } = require('./src/helper/RegisterExtraCommands');
+import { Gitlab } from '@gitbeaker/node';
+import { Client, IntentsBitField } from 'discord.js';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { LoadCommands } from './src/helper/LoadCommands.js';
 
 const client = new Client({
     intents: [
@@ -14,44 +11,19 @@ const client = new Client({
         IntentsBitField.Flags.GuildMessageReactions,
     ],
 });
+export { client as Client };
 
 const gitlab = new Gitlab({
     token: process.env.ACCESS_TOKEN,
 });
+export { gitlab as Gitlab };
 
-// Export client and gitlab api for other files to use
-module.exports.GitLab = gitlab;
-module.exports.Client = client;
+// Required since there are no such variables in ES6 modules
+export const __fileName = fileURLToPath(import.meta.url);
+export const __dirname = dirname(__fileName);
 
-const commands = [];
-client.commands = new Collection();
 client.on('ready', async () => {
-    const commandsPath = path.join(__dirname, 'src/commands/slash-commands');
-    const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-    console.log(`Loading ${commandFiles.length} commands...`.yellow);
-    for (const file of commandFiles) {
-        const filePath = path.join(commandsPath, file);
-        const command = require(filePath);
-
-        client.commands.set(command.data.name, command);
-        commands.push(command.data.toJSON());
-    }
-
-    await RegisterExtraCommands.ticketNotifications();
-
-    const guild_ids = client.guilds.cache.map(guild => guild.id);
-
-    const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
-    for (const guildId of guild_ids) {
-        rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId),
-            { body: commands })
-            .then(() => console.log('Bot is ready!'.green))
-            .catch((err) => {
-                    console.error(err);
-                    process.exit();
-                },
-            );
-    }
+    await LoadCommands.loadCommands();
 });
 
 client.on('interactionCreate', async interaction => {

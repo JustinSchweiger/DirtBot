@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder } = require('discord.js');
-const { Extra } = require('../../helper/Extra');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { EmbedBuilder } from 'discord.js';
+import { Extra } from '../../helper/Extra.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('help')
         .setDescription('Sends a list of all commands.'),

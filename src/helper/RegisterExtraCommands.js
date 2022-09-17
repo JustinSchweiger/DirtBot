@@ -1,11 +1,12 @@
-module.exports.RegisterExtraCommands = {
-    async ticketNotifications() {
-        const { File } = require('./GetFileFromGitlab');
-        const TickedNotifications = require('../commands/important-channels/ticket-notifications');
-        const ticketNotifications = JSON.parse(await File.get('ticket-notifications.json'));
-        const { Client } = require('../../index');
-        ticketNotifications.map(ticketNotification => {
+import { Client } from '../../index.js';
+import TickedNotifications from '../commands/important-channels/ticket-notifications.js';
+import { File } from './GetFileFromGitlab.js';
+
+export class RegisterExtraCommands {
+    static async ticketNotifications() {
+        const ticketNotificationsJson = JSON.parse(await File.get('ticket-notifications.json'));
+        ticketNotificationsJson.map(ticketNotification => {
             Client.commands.set(`ticket-notification-${ticketNotification['short']}`, TickedNotifications);
         });
-    },
-};
+    }
+}

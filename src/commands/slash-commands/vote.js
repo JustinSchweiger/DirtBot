@@ -1,10 +1,10 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { readFileSync, statSync } = require('fs');
-const path = require('path');
-const { GitLabFile } = require('../../helper/EnsureFileSync');
-const { Extra } = require('../../helper/Extra');
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { readFileSync, statSync } from 'fs';
+import { resolve } from 'path';
+import { GitLabFile } from '../../helper/EnsureFileSync.js';
+import { Extra } from '../../helper/Extra.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('vote')
         .setDescription('Shows the vote links.'),
@@ -13,7 +13,7 @@ module.exports = {
     },
     execute: async function(interaction) {
         await GitLabFile.serve(interaction, 'vote.json');
-        const votePath = path.join(__dirname, '..', '..', 'assets', 'vote.json');
+        const votePath = resolve('./assets/vote.json');
 
         const voteJson = JSON.parse(readFileSync(votePath).toString());
         const stats = statSync(votePath);

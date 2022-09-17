@@ -1,10 +1,10 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { readFileSync, statSync } = require('fs');
-const path = require('path');
-const { GitLabFile } = require('../../helper/EnsureFileSync');
-const { Extra } = require('../../helper/Extra');
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { readFileSync, statSync } from 'fs';
+import { resolve } from 'path';
+import { GitLabFile } from '../../helper/EnsureFileSync.js';
+import { Extra } from '../../helper/Extra.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('maps')
         .setDescription('Shows a list of old maps that can be downloaded.'),
@@ -13,7 +13,7 @@ module.exports = {
     },
     async execute(interaction) {
         await GitLabFile.serve(interaction, 'maps.json');
-        const mapsPath = path.join(__dirname, '..', '..', 'assets', 'maps.json');
+        const mapsPath = resolve('./assets/maps.json');
 
         const mapsJson = JSON.parse(readFileSync(mapsPath).toString());
         const stats = statSync(mapsPath);

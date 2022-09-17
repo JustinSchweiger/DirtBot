@@ -1,7 +1,7 @@
-const { GitLab } = require('../../index');
+import { Gitlab } from '../../index.js';
 
-module.exports.File = {
-    async get(path) {
-        return await GitLab.RepositoryFiles.showRaw(process.env.PROJECT_ID, path, 'main');
-    },
-};
+export class File {
+    static async get(path) {
+        return await Gitlab.RepositoryFiles.showRaw(process.env.PROJECT_ID, path, 'main');
+    }
+}
