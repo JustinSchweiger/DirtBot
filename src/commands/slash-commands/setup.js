@@ -21,18 +21,33 @@ export default {
                 .setDescription('Setup the roles.')
                 .addRoleOption(
                     option => option
+                        .setName('verified')
+                        .setDescription('The Verified role.')
+                        .setRequired(true),
+                ).addRoleOption(
+                    option => option
                         .setName('staff')
-                        .setDescription('The staff role. Players with this role will see tickets.')
+                        .setDescription('The Staff role. Players with this role will see tickets.')
                         .setRequired(true),
                 ).addRoleOption(
                     option => option
                         .setName('admin')
-                        .setDescription('The admin role. Players with this role will be pinged when the ticket is set to admin level.')
+                        .setDescription('The Admin role. Players with this role will be pinged when the ticket is set to admin level.')
+                        .setRequired(true),
+                ).addRoleOption(
+                    option => option
+                        .setName('network-admin')
+                        .setDescription('The Network Admin role. Network Admins will be pinged when a ticket is set to network admin level.')
                         .setRequired(true),
                 ).addRoleOption(
                     option => option
                         .setName('manager')
-                        .setDescription('The manager role. Players with this role will have access to more commands.')
+                        .setDescription('The Manager role. Players with this role will have access to more commands.')
+                        .setRequired(true),
+                ).addRoleOption(
+                    option => option
+                        .setName('owner')
+                        .setDescription('The Owner role.')
                         .setRequired(true),
                 ),
         )
@@ -52,6 +67,11 @@ export default {
                         .setRequired(true),
                 ).addChannelOption(
                     option => option
+                        .setName('closed-ticket-transcripts')
+                        .setDescription('The channel in which to send the transcripts of closed channels.')
+                        .setRequired(true),
+                ).addChannelOption(
+                    option => option
                         .setName('appeal-log')
                         .setDescription('The channel in which to post appeal logs.')
                         .setRequired(true),
@@ -64,6 +84,11 @@ export default {
                     option => option
                         .setName('support')
                         .setDescription('The channel in which to send the ticket creation embed.')
+                        .setRequired(true),
+                ).addChannelOption(
+                    option => option
+                        .setName('ticket-category')
+                        .setDescription('The category under which new tickets will be created.')
                         .setRequired(true),
                 ).addChannelOption(
                     option => option
@@ -112,9 +137,12 @@ export default {
             await interaction.editReply({ content: ':white_check_mark: All messages have been send in their respective channels.', ephemeral: true });
         } else if (interaction.options.getSubcommand() === 'roles') {
             const roles = {
+                verified: interaction.options.getRole('verified').id,
                 staff: interaction.options.getRole('staff').id,
                 admin: interaction.options.getRole('admin').id,
+                networkAdmin: interaction.options.getRole('network-admin').id,
                 manager: interaction.options.getRole('manager').id,
+                owner: interaction.options.getRole('owner').id,
             };
 
             writeFileSync(resolve('./src/config/roles.json'), JSON.stringify(roles, null, 2));
@@ -152,9 +180,11 @@ export default {
             const channelIds = {
                 'botLogChannel': interaction.options.getChannel('bot-log').id,
                 'ticketLogChannel': interaction.options.getChannel('ticket-log').id,
+                'closedTicketTranscriptsChannel': interaction.options.getChannel('closed-ticket-transcripts').id,
                 'appealLogChannel': interaction.options.getChannel('appeal-log').id,
                 'ticketNotificationsChannel': interaction.options.getChannel('ticket-notifications').id,
                 'supportChannel': interaction.options.getChannel('support').id,
+                'ticketCategory': interaction.options.getChannel('ticket-category').id,
                 'quickSupportChannel': interaction.options.getChannel('quick-support').id,
                 'punishmentAppealsChannel': interaction.options.getChannel('punishment-appeals').id,
                 'verificationChannel': interaction.options.getChannel('verification').id,

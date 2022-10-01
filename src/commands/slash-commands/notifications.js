@@ -65,7 +65,6 @@ export default {
         hasChoices: true,
     },
     async execute(interaction) {
-        console.log(interaction.options);
         const subcommand = interaction.options.getSubcommand();
         const target = interaction.options.getUser('target');
         const extra = await Extra.get();

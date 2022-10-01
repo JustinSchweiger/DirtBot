@@ -2,6 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'disc
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
+import TicketModal from './support-modal.js';
 
 export default {
     extra: {
@@ -26,24 +27,26 @@ export default {
                 {
                     name: '__How to use:__',
                     value: '**1.** Click on the button below. ' +
-                        '\n**2.** Choose a server from the dropdown menu.' +
-                        '\n**3.** Fill out the ticket form.' +
+                        '\n**2.** Fill out the form that pops up.' +
+                        '\n**3.** Hit the "Submit" button.' +
                         '\n**4.** A ticket with a link to it will be created for you. Click on it.' +
                         '\n**5.** A staff member will be with you shortly.',
                     inline: false,
                 },
                 {
                     name: '\u200b',
-                    value: `**Note**: Please only make tickets for issues that only the staff can help you with!\n \nFor small questions, please head over to <#${JSON.parse(readFileSync(resolve('./src/config/channels.json')))['quickSupportChannel']}>`,
+                    value: '**Note 1**: The form does not support images right now. Use **[Imgur](https://imgur.com/)** to upload your images and then paste the links in the form.',
+                    inline: false,
+                },
+                {
+                    name: '\u200b',
+                    value: `**Note 2**: Please only make tickets for issues that can only be resolved by staff!\nFor small questions, please head over to <#${JSON.parse(readFileSync(resolve('./src/config/channels.json')))['quickSupportChannel']}>`,
                     inline: false,
                 },
             ])
             .setFooter({ text: 'Thank you for using our ticket system!', iconURL: extra['footer-icon'] });
     },
     async execute(interaction) {
-        const customId = interaction.customId;
-        const memberId = interaction.member.id;
-        console.log(customId);
-        console.log(memberId);
+        await TicketModal.showModal(interaction);
     },
 };

@@ -4,3 +4,5 @@ node_modules/
 assets/*.json
 src/config/*.json
 /ticket-notifications/*.json
+/tickets/*.html
+/tickets/*.json

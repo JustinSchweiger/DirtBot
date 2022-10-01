@@ -3,9 +3,9 @@ import chalk from 'chalk';
 import { Routes } from 'discord-api-types/v10';
 import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
-import { join as joinPath } from 'path';
+import { join as joinPath, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { __dirname, __fileName, Client } from '../../index.js';
+import { __fileName, Client } from '../../index.js';
 import { Level, Logger } from './Logger.js';
 import { RegisterExtraCommands } from './RegisterExtraCommands.js';
 
@@ -14,11 +14,12 @@ export class LoadCommands {
         const commands = [];
         Client.commands = new Collection();
 
-        const commandsPath = joinPath(__dirname, 'src', 'commands', 'slash-commands');
+        let commandsAmount = 0;
+
+        const commandsPath = resolve('./src/commands/slash-commands');
         const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-        console.log(chalk.yellow(`Registering ${commandFiles.length} commands ...`));
-        await Logger.log(`Registering ${commandFiles.length} commands ...`, Level.INFO);
         for (const file of commandFiles) {
+            commandsAmount++;
             const filePath = joinPath(__fileName, '..', 'src', 'commands', 'slash-commands', file);
             const { default: command } = await import(pathToFileURL(filePath).href);
 
@@ -34,8 +35,32 @@ export class LoadCommands {
             commands.push(command.data.toJSON());
         }
 
+        const ticketCommandsPath = resolve('./src/commands/ticket-slash-commands');
+        const ticketCommandFiles = readdirSync(ticketCommandsPath).filter(file => file.endsWith('.js'));
+        for (const file of ticketCommandFiles) {
+            commandsAmount++;
+            const filePath = joinPath(__fileName, '..', 'src', 'commands', 'ticket-slash-commands', file);
+            const { default: command } = await import(pathToFileURL(filePath).href);
+
+            // Replace the choices
+            if (command.extra.hasChoices) {
+                const choices = await command.getChoices();
+                for (const choice of choices) {
+                    deepReplace(command, 'choices', choice.choices);
+                }
+            }
+
+            Client.commands.set(command.data.name, command);
+            commands.push(command.data.toJSON());
+        }
+
+
+        console.log(chalk.yellow(`Registering ${commandsAmount} commands ...`));
+        await Logger.log(`Registering ${commandsAmount} commands ...`, Level.INFO);
         await RegisterExtraCommands.ticketNotifications();
         await RegisterExtraCommands.support();
+        await RegisterExtraCommands.ticketModal();
+        await RegisterExtraCommands.ticketCloseButtons();
 
         const guild_ids = Client.guilds.cache.map(guild => guild.id);
         const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
