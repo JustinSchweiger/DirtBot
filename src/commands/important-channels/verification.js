@@ -27,6 +27,7 @@ export default {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
         const username = await VerificationDatabase.getUsername(interaction.user.id);
+        const extra = await Extra.get();
 
         if (username) {
             const embed = new EmbedBuilder()
@@ -41,7 +42,6 @@ export default {
         }
 
         const activeCode = await VerificationDatabase.hasUnusedCode(interaction.user.id);
-        const extra = await Extra.get();
         if (activeCode) {
             const embed = new EmbedBuilder()
                 .setColor('#df0000')
