@@ -38,6 +38,7 @@ const client = new Client({
         IntentsBitField.Flags.GuildMessages,
         IntentsBitField.Flags.GuildMessageReactions,
         IntentsBitField.Flags.GuildPresences,
+        IntentsBitField.Flags.GuildMembers,
         IntentsBitField.Flags.MessageContent,
     ],
 });

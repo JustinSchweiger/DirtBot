@@ -18,6 +18,56 @@ export class Database {
         return conn;
     }
 
+    static async insertVerificationCode(discordId, code) {
+        const connection = await this.connect();
+        if (!connection) return undefined;
+
+        await connection.execute('INSERT INTO verification (discordid, code) VALUES (?, ?)', [discordId, code]).catch(() => { return undefined; });
+        connection.end();
+    }
+
+    static async hasUnusedCode(discordId) {
+        const connection = await this.connect();
+        if (!connection) return undefined;
+
+        const [res] = await connection.execute('SELECT code FROM verification WHERE discordid = ?', [discordId]);
+        connection.end();
+
+        if (res.length === 0) {
+            return false;
+        }
+
+        return res[0].code;
+    }
+
+    static async linkUser(discordId, uuid) {
+        const connection = await this.connect();
+        if (!connection) return undefined;
+
+        await this.insertVerificationCode(discordId, null);
+        await connection.execute('UPDATE verification SET uuid = ? WHERE discordid = ?', [uuid, discordId]);
+        await connection.execute('UPDATE verification SET code = NULL WHERE discordid = ?', [discordId]);
+        connection.end();
+    }
+
+    static async unlinkUser(discordId) {
+        const connection = await this.connect();
+        if (!connection) return undefined;
+
+        await connection.execute('DELETE FROM verification WHERE discordid = ?', [discordId]);
+        connection.end();
+    }
+
+    static async hasUser(discordId) {
+        const connection = await this.connect();
+        if (!connection) return undefined;
+
+        const [res] = await connection.execute('SELECT * FROM verification WHERE discordid = ?', [discordId]);
+        connection.end();
+
+        return res.length !== 0;
+    }
+
     static async getUsername(discordId) {
         const connection = await this.connect();
         if (!connection) return undefined;
