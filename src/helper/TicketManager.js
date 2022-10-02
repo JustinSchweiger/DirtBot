@@ -17,7 +17,6 @@ export class TicketManager {
             parent: JSON.parse(readFileSync(resolve('./src/config/channels.json')))['ticketCategory'],
             name: shortDescription ? shortDescription + '-' + newTicketNumber : newTicketNumber,
             type: ChannelType.GuildText,
-            topic: `Ticket Opened by ${author}`,
             reason: shortDescription,
             permissionOverwrites: [
                 {
@@ -34,8 +33,6 @@ export class TicketManager {
                 },
             ],
         });
-
-        await newChannel.setTopic();
 
         await this.sendTicketCreationEmbed(newChannel, username, problem, author, uuid, newTicketNumber);
         return newChannel;
@@ -342,7 +339,7 @@ export class TicketManager {
                     ephemeral: true,
                 });
             }
-            return;
+            return false;
         }
 
         const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
@@ -358,7 +355,11 @@ export class TicketManager {
                     ephemeral: true,
                 });
             }
+
+            return false;
         }
+
+        return true;
     }
 
     static async populateTicket(newServer, newTicketName, newUsername, uuid, channel, user) {
@@ -406,7 +407,22 @@ export class TicketManager {
         updatedTicket.closedBy = user.id;
         updatedTicket.closedReason = reason;
         writeFileSync(resolve(`./tickets/${channel.id}.json`), JSON.stringify(updatedTicket, null, 2));
-        await channel.setTopic(`Pending Review | Closed by ${user} | **${reason}**`);
+
+        let category = await Client.channels.cache.find(c => c.name === '🎫 Pending Review');
+
+        if (!category) {
+            await channel.guild.channels.create({
+                type: ChannelType.GuildCategory,
+                name: '🎫 Pending Review',
+                permissionOverwrites: [{
+                    id: channel.guild.roles.everyone,
+                    deny: [PermissionFlagsBits.ViewChannel],
+                }],
+            });
+        }
+
+        category = await Client.channels.cache.find(c => c.name === '🎫 Pending Review');
+        await channel.setParent(category.id, { lockPermissions: false });
     }
 
     static async closeTicket(channel) {
@@ -440,8 +456,8 @@ export class TicketManager {
                     inline: false,
                 },
                 {
-                    name: '__**Transcript**__',
-                    value: `[Click Here](${process.env.FRONTEND_URL}/?ticket=${ticket.ticketUuid}) to view the transcript.`,
+                    name: '\u200b',
+                    value: `[Click Here](${process.env.FRONTEND_URL}/?ticket=${ticket.ticketUuid}) to view the transcript.\n `,
                     inline: false,
                 },
             ]).setFooter({
@@ -492,7 +508,27 @@ export class TicketManager {
         updatedTicket.closedBy = '';
         updatedTicket.closedReason = '';
         writeFileSync(resolve(`./tickets/${channel.id}.json`), JSON.stringify(updatedTicket, null, 2));
-        await channel.setTopic(`Ticket Opened by ${channel.guild.members.cache.get(ticket.author)}`);
+
+        const standardCategory = channel.guild.channels.cache.get(JSON.parse(readFileSync(resolve('./src/config/channels.json')))['ticketCategory']).name;
+        const ticketNotifications = JSON.parse(await File.get('ticket-notifications.json'));
+        const serverLabel = ticketNotifications.find((server) => server.short === ticket.server) ?
+            ticketNotifications.find((server) => server.short === ticket.server).name :
+            standardCategory;
+        let category = await Client.channels.cache.find(c => c.name === serverLabel);
+
+        if (!category) {
+            await channel.guild.channels.create({
+                type: ChannelType.GuildCategory,
+                name: serverLabel,
+                permissionOverwrites: [{
+                    id: channel.guild.roles.everyone,
+                    deny: [PermissionFlagsBits.ViewChannel],
+                }],
+            });
+        }
+
+        category = await Client.channels.cache.find(c => c.name === serverLabel);
+        await channel.setParent(category.id, { lockPermissions: false });
     }
 
     static async changeLevel(channel, user, levelId, level, interaction, ping) {

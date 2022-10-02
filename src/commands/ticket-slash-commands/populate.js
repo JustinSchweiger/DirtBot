@@ -44,7 +44,7 @@ export default {
         hasChoices: true,
     },
     async execute(interaction) {
-        await TicketManager.hasPermsAndIsTicket(interaction, false);
+        if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;
 
         const ticket = JSON.parse(readFileSync(resolve(`./tickets/${interaction.channel.id}.json`)));
         const channel = interaction.guild.channels.cache.get(interaction.channel.id);

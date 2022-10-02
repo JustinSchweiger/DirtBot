@@ -54,6 +54,8 @@ export default {
         hidden: false,
     },
     async execute(interaction) {
+        if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;
+
         const channel = interaction.guild.channels.cache.get(interaction.channel.id);
 
         if (!interaction.customId) {

@@ -18,7 +18,7 @@ export default {
     },
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
-        await TicketManager.hasPermsAndIsTicket(interaction, true);
+        if (!await TicketManager.hasPermsAndIsTicket(interaction, true)) return;
 
         const channel = interaction.guild.channels.cache.get(interaction.channel.id);
         const playerToRemove = interaction.options.getUser('player');

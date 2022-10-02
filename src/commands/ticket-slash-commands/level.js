@@ -43,7 +43,7 @@ export default {
         hidden: false,
     },
     async execute(interaction) {
-        await TicketManager.hasPermsAndIsTicket(interaction, false);
+        if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;
 
         const channel = interaction.guild.channels.cache.get(interaction.channel.id);
         const choice = interaction.options.getString('level');

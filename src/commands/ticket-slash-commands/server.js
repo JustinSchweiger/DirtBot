@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { readdirSync, readFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { File } from '../../helper/GetFileFromGitlab.js';
 import { TicketManager } from '../../helper/TicketManager.js';
@@ -33,17 +33,7 @@ export default {
         hasChoices: true,
     },
     async execute(interaction) {
-        const openTickets = readdirSync(resolve('./tickets'));
-        if (!openTickets.includes(interaction.channel.id + '.json')) {
-            await interaction.reply('This command can only be run in a ticket channel.');
-            return;
-        }
-
-        const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
-        if (!interaction.member.roles.cache.has(roles['staff'])) {
-            await interaction.reply('You do not have permission to run this command.');
-            return;
-        }
+        if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;
 
         const newServer = interaction.options.getString('server');
 

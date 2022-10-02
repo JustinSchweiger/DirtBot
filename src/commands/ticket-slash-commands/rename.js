@@ -18,7 +18,7 @@ export default {
     },
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
-        await TicketManager.hasPermsAndIsTicket(interaction, true);
+        if (!await TicketManager.hasPermsAndIsTicket(interaction, true)) return;
 
         const ticket = JSON.parse(readFileSync(resolve(`./tickets/${interaction.channel.id}.json`)));
         const channel = interaction.guild.channels.cache.get(interaction.channel.id);

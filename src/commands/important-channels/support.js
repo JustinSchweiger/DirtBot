@@ -35,7 +35,7 @@ export default {
                 },
                 {
                     name: '\u200b',
-                    value: '**Note 1**: The form does not support images right now. Use **[Imgur](https://imgur.com/)** to upload your images and then paste the links in the form.',
+                    value: '**Note 1**: The form does not support images right now. Either use **[Imgur](https://imgur.com/)** and paste the link or just paste your image after the ticket has been created.',
                     inline: false,
                 },
                 {
