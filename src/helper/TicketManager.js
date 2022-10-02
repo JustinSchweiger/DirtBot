@@ -244,6 +244,9 @@ export class TicketManager {
                 embedInfo.name = '__**Ticket Event | Cancel Close**__';
                 embedInfo.value = '\u200b';
                 break;
+            case 'silentclose':
+                embedInfo.name = '__**Ticket Event | Silent Close**__';
+                embedInfo.value = '\u200b';
         }
 
         const serverChangeEmbed = new EmbedBuilder()
@@ -704,5 +707,15 @@ export class TicketManager {
         updatedTicket.level = levelId;
 
         writeFileSync(resolve(`./tickets/${channel.id}.json`), JSON.stringify(updatedTicket, null, 2));
+    }
+
+    static async silentClose(channel, user) {
+        const ticket = JSON.parse(readFileSync(resolve(`./tickets/${channel.id}.json`)));
+
+        await channel.delete();
+
+        await this.logTicketChange('silentclose', undefined, user, channel, ticket.ticketId);
+
+        unlinkSync(resolve(`./tickets/${channel.id}.json`));
     }
 }
