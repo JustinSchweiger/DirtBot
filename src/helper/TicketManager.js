@@ -433,7 +433,7 @@ export class TicketManager {
         const ticket = JSON.parse(readFileSync(resolve(`./tickets/${channel.id}.json`)));
         const author = channel.guild.members.cache.get(ticket.author);
         const closedBy = channel.guild.members.cache.get(ticket.closedBy);
-        const transcriptChannel = channel.guild.channels.cache.get(JSON.parse(readFileSync(resolve('./src/config/channels.json'))).closedTicketTranscriptsChannel);
+        const transcriptChannel = channel.guild.channels.cache.get(JSON.parse(readFileSync(resolve('./src/config/channels.json'))).transcriptsChannel);
 
         const transcript = await createTranscript(channel, {
             limit: -1,
@@ -471,7 +471,7 @@ export class TicketManager {
 
         const transcriptEmbed = new EmbedBuilder()
             .setColor('#df0000')
-            .setDescription(`[**#${ticket.ticketId}**](${process.env.FRONTEND_URL}/?ticket=${ticket.ticketUuid}) closed by ${closedBy}`)
+            .setDescription(`[**Ticket #${ticket.ticketId}**](${process.env.FRONTEND_URL}/?ticket=${ticket.ticketUuid}) closed by ${closedBy}`)
             .setTimestamp();
 
         await transcriptChannel.send({ embeds: [transcriptEmbed] });

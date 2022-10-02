@@ -67,7 +67,7 @@ export default {
                         .setRequired(true),
                 ).addChannelOption(
                     option => option
-                        .setName('closed-ticket-transcripts')
+                        .setName('transcripts')
                         .setDescription('The channel in which to send the transcripts of closed channels.')
                         .setRequired(true),
                 ).addChannelOption(
@@ -180,7 +180,7 @@ export default {
             const channelIds = {
                 'botLogChannel': interaction.options.getChannel('bot-log').id,
                 'ticketLogChannel': interaction.options.getChannel('ticket-log').id,
-                'closedTicketTranscriptsChannel': interaction.options.getChannel('closed-ticket-transcripts').id,
+                'transcriptsChannel': interaction.options.getChannel('transcripts').id,
                 'appealLogChannel': interaction.options.getChannel('appeal-log').id,
                 'ticketNotificationsChannel': interaction.options.getChannel('ticket-notifications').id,
                 'supportChannel': interaction.options.getChannel('support').id,
