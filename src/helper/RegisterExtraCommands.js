@@ -1,4 +1,7 @@
+import { existsSync, readFileSync } from 'fs';
+import { resolve } from 'path';
 import { Client } from '../../index.js';
+import RoleAssignment from '../commands/important-channels/role-assignment.js';
 import TicketModal from '../commands/important-channels/support-modal.js';
 import Support from '../commands/important-channels/support.js';
 import TickedNotifications from '../commands/important-channels/ticket-notifications.js';
@@ -29,5 +32,16 @@ export class RegisterExtraCommands {
     static async ticketCloseButtons() {
         await Client.commands.set('close-ticket', Close);
         await Client.commands.set('cancel-closure', Close);
+    }
+
+    static async roleAssignmentButtons() {
+        if (!existsSync(resolve('./src/config/role-assignments.json'))) {
+            return;
+        }
+
+        const roleAssignments = JSON.parse(readFileSync(resolve('./src/config/role-assignments.json')));
+        roleAssignments.forEach(role => {
+            Client.commands.set(role['role'], RoleAssignment);
+        });
     }
 }
