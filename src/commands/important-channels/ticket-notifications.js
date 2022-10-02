@@ -69,21 +69,17 @@ export default {
 
         writeFileSync(`${filePath}/${customId}.json`, JSON.stringify(file, null, 2));
 
-        const extra = await Extra.get();
-
         if (added) {
             const addedEmbed = new EmbedBuilder()
                 .setColor('#df0000')
-                .setTitle(`${extra['bulletpoint']} Added ${extra['bulletpoint']}`)
-                .setDescription(`<:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['name']}:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['id']}> **${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['name']}**`);
+                .setDescription(`**Added** <:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['name']}:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['id']}> **${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['name']}**`);
             await interaction.reply({ embeds: [addedEmbed], ephemeral: true });
             return;
         }
 
         const removedEmbed = new EmbedBuilder()
             .setColor('#df0000')
-            .setTitle(`${extra['bulletpoint']} Removed ${extra['bulletpoint']}`)
-            .setDescription(`<:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['name']}:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['id']}> **${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['name']}**`);
+            .setDescription(`**Removed** <:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['name']}:${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['emoji']['id']}> **${ticketNotifications.find(ticketNotification => ticketNotification['short'] === customId)['name']}**`);
         await interaction.reply({ embeds: [removedEmbed], ephemeral: true });
     },
 };

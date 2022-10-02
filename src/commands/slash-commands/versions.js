@@ -11,8 +11,8 @@ export default {
     extra: {
         hidden: false,
     },
-    execute: async function(interaction) {
-        await GitLabFile.serve(interaction, 'servers.json');
+    async execute(interaction) {
+        await GitLabFile.serve('servers.json');
         const serversPath = resolve('./assets/servers.json');
 
         const serversJson = JSON.parse(readFileSync(serversPath).toString());

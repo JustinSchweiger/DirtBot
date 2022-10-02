@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Client } from '../../index.js';
+import Info from '../commands/important-channels/info.js';
 import RoleAssignment from '../commands/important-channels/role-assignment.js';
 import Support from '../commands/important-channels/support.js';
 import TickedNotifications from '../commands/important-channels/ticket-notifications.js';
@@ -31,7 +32,19 @@ export class Setup {
 
         const roleAssignmentChannel = await Client.channels.fetch(channelIds['roleAssignmentChannel']);
         await roleAssignment(roleAssignmentChannel);
+
+        const infoChannel = await Client.channels.fetch(channelIds['infoChannel']);
+        await info(infoChannel);
     }
+}
+
+async function info(channel) {
+    const infoEmbeds = await Info.InfoEmbeds();
+    channel.send({
+        embeds: [
+            ...infoEmbeds,
+        ],
+    });
 }
 
 async function ticketNotification(channel) {

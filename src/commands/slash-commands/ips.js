@@ -11,8 +11,8 @@ export default {
     extra: {
         hidden: false,
     },
-    async execute(interaction) {
-        await GitLabFile.serve(interaction, 'servers.json');
+    async getEmbeds() {
+        await GitLabFile.serve('servers.json');
         const serversPath = resolve('./assets/servers.json');
 
         const serversJson = JSON.parse(readFileSync(serversPath).toString());
@@ -64,29 +64,34 @@ export default {
 
         const extra = await Extra.get();
 
-        const pixelEmbed = new EmbedBuilder()
-            .setColor('#df0000')
-            .setTitle(`${extra['bulletpoint']} DirtCraft Pixelmon Server IPs ${extra['bulletpoint']}`)
-            .addFields(pixel)
-            .setImage(extra['pixel-banner'])
-            .setFooter({ text: 'Last Updated ', iconURL: extra['footer-icon'] })
-            .setTimestamp(date);
-
-        const modpackEmbed = new EmbedBuilder()
-            .setColor('#df0000')
-            .setTitle(`${extra['bulletpoint']} DirtCraft Modpack Server IPs ${extra['bulletpoint']}`)
-            .addFields(modpack)
-            .setImage(extra['modpack-banner'])
-            .setFooter({ text: 'Last Updated ', iconURL: extra['footer-icon'] })
-            .setTimestamp(date);
-
-        const hubEmbed = new EmbedBuilder()
-            .setColor('#df0000')
-            .setTitle(`${extra['bulletpoint']} DirtCraft Hub${extra['bulletpoint']}`)
-            .setDescription('You can connect to the hub by using the IP `dirtcraft.gg` or `pixelmon.gg`.\nFrom there you can connect to all of our `1.7.10`, `1.10.2` and `1.12.2` servers!\n \nThere is currently no hub for our `1.16.5` servers!\nPlease use the direct ip for now!')
-            .setFooter({ text: 'Last Updated ', iconURL: extra['footer-icon'] })
-            .setTimestamp(date);
-
-        interaction.reply({ embeds: [pixelEmbed, modpackEmbed, hubEmbed] });
+        return [
+            new EmbedBuilder()
+                .setColor('#df0000')
+                .setTitle(`${extra['bulletpoint']} DirtCraft Pixelmon Server IPs ${extra['bulletpoint']}`)
+                .addFields(pixel)
+                .setImage(extra['pixel-banner'])
+                .setFooter({ text: 'Last Updated ', iconURL: extra['footer-icon'] })
+                .setTimestamp(date),
+            new EmbedBuilder()
+                .setColor('#df0000')
+                .setTitle(`${extra['bulletpoint']} DirtCraft Modpack Server IPs ${extra['bulletpoint']}`)
+                .addFields(modpack)
+                .setImage(extra['modpack-banner'])
+                .setFooter({ text: 'Last Updated ', iconURL: extra['footer-icon'] })
+                .setTimestamp(date),
+            new EmbedBuilder()
+                .setColor('#df0000')
+                .setTitle(`${extra['bulletpoint']} DirtCraft Hub${extra['bulletpoint']}`)
+                .setDescription('You can connect to the hub by using the IP `dirtcraft.gg` or `pixelmon.gg`.\nFrom there you can connect to all of our `1.7.10`, `1.10.2` and `1.12.2` servers!\n \nThere is currently no hub for our `1.16.5` servers!\nPlease use the direct ip for now!')
+                .setFooter({ text: 'Last Updated ', iconURL: extra['footer-icon'] })
+                .setTimestamp(date),
+        ];
+    },
+    async execute(interaction) {
+        interaction.reply({
+            embeds: [
+                ...await this.getEmbeds(),
+            ],
+        });
     },
 };

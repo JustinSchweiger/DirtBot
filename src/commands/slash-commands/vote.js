@@ -11,8 +11,8 @@ export default {
     extra: {
         hidden: false,
     },
-    execute: async function(interaction) {
-        await GitLabFile.serve(interaction, 'vote.json');
+    async getEmbed() {
+        await GitLabFile.serve('vote.json');
         const votePath = resolve('./assets/vote.json');
 
         const voteJson = JSON.parse(readFileSync(votePath).toString());
@@ -23,7 +23,7 @@ export default {
             {
                 name: '__Vote Links__',
                 value: voteJson
-                    .map(vote => `[**Click me to vote on ${vote['site']}**](${vote['link']} 'Click to open the voting page.')`)
+                    .map(vote => `[Click me to vote on **${vote['site']}**](${vote['link']} 'Click to open the voting page.')`)
                     .join('\n'),
                 inline: true,
             },
@@ -31,13 +31,18 @@ export default {
 
         const extra = await Extra.get();
 
-        const embed = new EmbedBuilder()
+        return new EmbedBuilder()
             .setColor('#df0000')
             .setTitle(`${extra['bulletpoint']} DirtCraft Vote Links ${extra['bulletpoint']}`)
             .addFields(voting)
             .setFooter({ text: 'Last Update ', iconURL: extra['footer-icon'] })
             .setTimestamp(date);
-
-        interaction.reply({ embeds: [embed] });
+    },
+    async execute(interaction) {
+        interaction.reply({
+            embeds: [
+                await this.getEmbed(),
+            ],
+        });
     },
 };

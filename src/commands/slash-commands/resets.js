@@ -12,7 +12,7 @@ export default {
         hidden: false,
     },
     async execute(interaction) {
-        await GitLabFile.serve(interaction, 'servers.json');
+        await GitLabFile.serve('servers.json');
         const serversPath = resolve('./assets/servers.json');
 
         const serversJson = JSON.parse(readFileSync(serversPath).toString());

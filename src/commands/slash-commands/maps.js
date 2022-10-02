@@ -12,7 +12,7 @@ export default {
         hidden: false,
     },
     async execute(interaction) {
-        await GitLabFile.serve(interaction, 'maps.json');
+        await GitLabFile.serve('maps.json');
         const mapsPath = resolve('./assets/maps.json');
 
         const mapsJson = JSON.parse(readFileSync(mapsPath).toString());

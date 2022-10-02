@@ -11,7 +11,7 @@ new CronJob(
     '0 * * * * *',
     async () => {
         const ticketsPath = resolve('./tickets');
-        const compareDate = new Date(Date.now() - 86400 * 1000).toISOString();
+        const compareDate = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
         const ticketsToClose = readdirSync(ticketsPath)
             .filter(file => file.endsWith('.json') && file !== '#####.json')
