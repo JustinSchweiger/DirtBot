@@ -5,6 +5,7 @@ import { existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from
 import { resolve } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { Client } from '../../index.js';
+import review from '../commands/slash-commands/review.js';
 import { Extra } from './Extra.js';
 import { File } from './GetFileFromGitlab.js';
 
@@ -465,20 +466,6 @@ export class TicketManager {
                 iconURL: (await Extra.get())['footer-icon'],
             }).setTimestamp();
 
-        const reviewEmbed = new EmbedBuilder()
-            .setColor('#df0000')
-            .setTitle(`${(await Extra.get())['bulletpoint']} DirtCraft Ticket System ${(await Extra.get())['bulletpoint']}`)
-            .addFields([
-                {
-                    name: '__**Review**__',
-                    value: 'Please consider leaving a review on your experiences on DirtCraft and the support you have received.\n' +
-                        'We appreciate the review and hope you enjoy your time on DirtCraft!\n' +
-                        '[Click me to leave a review on **Pixelmon Servers**](https://pixelmonservers.com/server/75qpnFWv/dirtcraft-pixelmon-reforged)\n' +
-                        '[Click me to leave a review on **FTB Servers**](https://ftbservers.com/server/rDh9a32R/dirtcraft-modded-network)',
-                    inline: false,
-                },
-            ]);
-
         const transcriptEmbed = new EmbedBuilder()
             .setColor('#df0000')
             .setDescription(`[**#${ticket.ticketId}**](${process.env.FRONTEND_URL}/?ticket=${ticket.ticketUuid}) closed by ${closedBy}`)
@@ -487,7 +474,7 @@ export class TicketManager {
         await transcriptChannel.send({ embeds: [transcriptEmbed] });
 
         await author.send({
-            embeds: [closeEmbed, reviewEmbed],
+            embeds: [closeEmbed, await review.getEmbed()],
         });
 
         writeFileSync(resolve(`./tickets/${ticket.ticketUuid}.html`), transcript);
