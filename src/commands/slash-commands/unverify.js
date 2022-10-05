@@ -10,6 +10,7 @@ export default {
         .setDescription('Unlink your Discord & Minecraft account.'),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async execute(interaction) {
         await interaction.deferReply();

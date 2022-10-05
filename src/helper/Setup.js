@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Client } from '../../index.js';
+import Application from '../commands/important-channels/applications.js';
 import Info from '../commands/important-channels/info.js';
 import RoleAssignment from '../commands/important-channels/role-assignment.js';
 import Support from '../commands/important-channels/support.js';
@@ -19,6 +20,7 @@ export class Setup {
             channelIds['roleAssignmentChannel'],
             channelIds['verificationChannel'],
             channelIds['punishmentAppealsChannel'],
+            channelIds['applicationChannel'],
         ]);
 
         const ticketNotificationChannel = await Client.channels.fetch(channelIds['ticketNotificationsChannel']);
@@ -35,6 +37,9 @@ export class Setup {
 
         const infoChannel = await Client.channels.fetch(channelIds['infoChannel']);
         await info(infoChannel);
+
+        const applicationChannel = await Client.channels.fetch(channelIds['applicationChannel']);
+        await application(applicationChannel);
     }
 }
 
@@ -45,6 +50,13 @@ async function info(channel) {
             ...infoEmbeds,
         ],
     });
+}
+
+async function application(channel) {
+    await Client.commands.set('application', Application);
+    const applicationEmbed = await Application.ApplicationEmbed();
+    const buttons = await Application.ApplicationButtons();
+    channel.send({ embeds: [applicationEmbed], components: [buttons] });
 }
 
 async function ticketNotification(channel) {

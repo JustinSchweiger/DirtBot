@@ -5,6 +5,7 @@ import vote from '../slash-commands/vote.js';
 export default {
     extra: {
         hidden: true,
+        inHelp: false,
     },
     async InfoEmbeds() {
         const embeds = [];

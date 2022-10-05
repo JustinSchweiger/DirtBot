@@ -13,6 +13,7 @@ export default {
         ),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async execute(interaction) {
         const amount = interaction.options.getInteger('amount');

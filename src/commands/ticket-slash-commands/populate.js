@@ -42,6 +42,8 @@ export default {
     extra: {
         hidden: false,
         hasChoices: true,
+        inHelp: true,
+        ticketCommand: true,
     },
     async execute(interaction) {
         if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;

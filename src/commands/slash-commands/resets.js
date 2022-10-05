@@ -10,6 +10,7 @@ export default {
         .setDescription('Shows when our servers were last reset.'),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async execute(interaction) {
         await GitLabFile.serve('servers.json');

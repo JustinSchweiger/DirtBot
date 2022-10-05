@@ -8,11 +8,12 @@ export default {
         .setDescription('Sends a list of all commands.'),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async execute(interaction) {
         const commands = interaction.client.commands;
-        const commandList = commands
-            .filter(command => !command.extra.hidden)
+        const normalCommands = commands
+            .filter(command => command.extra.inHelp && !command.extra.ticketCommand && !command.extra.hidden)
             .map(command => {
                 return {
                     name: command.data.name,
@@ -20,15 +21,46 @@ export default {
                 };
             });
 
+        const ticketCommands = [
+            ...new Set(commands
+                .filter(command => command.extra.inHelp && command.extra.ticketCommand)
+                .map(command => {
+                    return {
+                        name: command.data.name,
+                        description: command.data.description,
+                    };
+                }),
+            ),
+        ].filter((value, index, self) =>
+                index === self.findIndex((t) => (
+                    t.name === value.name
+                )),
+        );
+
         const commandsHelp = [
             {
-                name: '__Command__',
-                value: commandList.map(command => `**/${command.name}**`).join('\n'),
+                name: '__**Normal Commands**__',
+                value: normalCommands.map(command => `**/${command.name}**`).join('\n'),
                 inline: true,
             },
             {
-                name: '__Description__',
-                value: commandList.map(command => command.description).join('\n'),
+                name: '\u200b',
+                value: normalCommands.map(command => command.description).join('\n'),
+                inline: true,
+            },
+            {
+                name: '\u200b',
+                value: '\u200b',
+                inline: false,
+            },
+            {
+                name: '__**Ticket Commands**__',
+                value: ticketCommands.map(command => `**/${command.name}**`).join('\n'),
+                inline: true,
+            },
+            {
+                name: '\u200b',
+                value: ticketCommands.map(command => command.description).join('\n'),
                 inline: true,
             },
         ];
@@ -39,7 +71,7 @@ export default {
             .setColor('#df0000')
             .setTitle(`${extra['bulletpoint']} DirtCraft Bot Commands ${extra['bulletpoint']}`)
             .addFields(commandsHelp)
-            .setFooter({ text: `Found a total of ${commandList.length} commands.`, iconURL: extra['footer-icon'] })
+            .setFooter({ text: `Found a total of ${normalCommands.length + ticketCommands.length} commands.`, iconURL: extra['footer-icon'] })
             .setTimestamp();
 
         interaction.reply({ embeds: [embed] });

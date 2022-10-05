@@ -5,6 +5,7 @@ import { Database as VerificationDatabase } from '../../helper/VerificationDatab
 export default {
     extra: {
         hidden: true,
+        inHelp: false,
     },
     async VerificationButton() {
         return new ActionRowBuilder().addComponents(

@@ -1,5 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { readFileSync } from 'fs';
 import minecraftPlayer from 'minecraft-player';
+import { resolve } from 'path';
 import { TicketManager } from '../../helper/TicketManager.js';
 
 export default {
@@ -14,6 +16,8 @@ export default {
         ),
     extra: {
         hidden: false,
+        inHelp: true,
+        ticketCommand: true,
     },
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });

@@ -10,6 +10,7 @@ export default {
         .setDescription('Shows the store links.'),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async getEmbed() {
         await GitLabFile.serve('stores.json');

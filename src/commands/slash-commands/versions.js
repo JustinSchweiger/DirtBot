@@ -10,6 +10,7 @@ export default {
         .setDescription('Shows the versions of all our servers.'),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async execute(interaction) {
         await GitLabFile.serve('servers.json');

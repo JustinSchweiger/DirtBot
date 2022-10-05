@@ -15,6 +15,8 @@ export default {
         ),
     extra: {
         hidden: false,
+        inHelp: true,
+        ticketCommand: true,
     },
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });

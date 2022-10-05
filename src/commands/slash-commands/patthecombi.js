@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { Extra } from '../../helper/Extra.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -6,8 +7,10 @@ export default {
         .setDescription('Cause everyone wants to pet combi ...'),
     extra: {
         hidden: true,
+        inHelp: true,
     },
     async execute(interaction) {
-        await interaction.reply('<a:petthecombi:1020025249770774631>');
+        const extra = await Extra.get();
+        await interaction.reply(extra['petthecombi-emoji']);
     },
 };

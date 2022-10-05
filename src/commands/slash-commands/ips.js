@@ -10,6 +10,7 @@ export default {
         .setDescription('Shows the ips of all our servers.'),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async getEmbeds() {
         await GitLabFile.serve('servers.json');

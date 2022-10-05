@@ -10,6 +10,7 @@ export default {
         .setDescription('Shows a list of old maps that can be downloaded.'),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async execute(interaction) {
         await GitLabFile.serve('maps.json');

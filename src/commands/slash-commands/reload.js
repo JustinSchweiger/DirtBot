@@ -1,4 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
 import { LoadCommands } from '../../helper/LoadCommands.js';
 import { Logger } from '../../helper/Logger.js';
@@ -9,6 +11,7 @@ export default {
         .setDescription('Reloads the commands. Needed for choices.'),
     extra: {
         hidden: true,
+        inHelp: true,
     },
     execute: async function(interaction) {
         await interaction.deferReply({ ephemeral: true });

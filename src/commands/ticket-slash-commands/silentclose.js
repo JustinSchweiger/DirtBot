@@ -1,4 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { TicketManager } from '../../helper/TicketManager.js';
 
 export default {
@@ -7,6 +9,8 @@ export default {
         .setDescription('Silently closes a ticket without notifying the author'),
     extra: {
         hidden: false,
+        inHelp: true,
+        ticketCommand: true,
     },
     async execute(interaction) {
         if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;

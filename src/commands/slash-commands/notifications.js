@@ -63,6 +63,7 @@ export default {
     extra: {
         hidden: false,
         hasChoices: true,
+        inHelp: true,
     },
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand();

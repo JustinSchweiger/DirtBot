@@ -10,6 +10,7 @@ export default {
         .setDescription('Shows the review links.'),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async getEmbed() {
         await GitLabFile.serve('reviews.json');
@@ -38,7 +39,8 @@ export default {
                         .join('\n'),
                     inline: true,
                 },
-            ]).setFooter({ text: 'Thank you for leaving a review :)', iconURL: extra['footer-icon'] });
+            ]).setFooter({ text: 'Thank you for leaving a review :)', iconURL: extra['footer-icon'] })
+            .setTimestamp(date);
     },
     async execute(interaction) {
         interaction.reply({

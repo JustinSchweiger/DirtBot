@@ -547,7 +547,7 @@ export class TicketManager {
             } else {
                 const embed = new EmbedBuilder()
                     .setColor('#df0000')
-                    .setDescription('Ticket level changed to `Staff`!');
+                    .setDescription(`Ticket level changed to <@&${levelId}>!`);
                 await interaction.reply({ embeds: [embed] });
             }
 
@@ -579,7 +579,7 @@ export class TicketManager {
             } else {
                 const embed = new EmbedBuilder()
                     .setColor('#df0000')
-                    .setDescription('Ticket level changed to `Staff`!');
+                    .setDescription(`Ticket level changed to <@&${levelId}>!`);
                 await interaction.reply({ embeds: [embed] });
             }
 
@@ -609,8 +609,8 @@ export class TicketManager {
             } else {
                 const embed = new EmbedBuilder()
                     .setColor('#df0000')
-                    .setDescription('Ticket level changed to `Staff`!');
-                await interaction.editReply({ embeds: [embed] });
+                    .setDescription(`Ticket level changed to <@&${levelId}>!`);
+                await interaction.reply({ embeds: [embed] });
             }
 
             let category = await interaction.guild.channels.cache.find(c => c.name === '🟡 Manager Tickets');
@@ -639,7 +639,7 @@ export class TicketManager {
             } else {
                 const embed = new EmbedBuilder()
                     .setColor('#df0000')
-                    .setDescription('Ticket level changed to `Staff`!');
+                    .setDescription(`Ticket level changed to <@&${levelId}>!`);
                 await interaction.reply({ embeds: [embed] });
             }
 
@@ -659,6 +659,17 @@ export class TicketManager {
             category = await Client.channels.cache.find(c => c.name === '⚪ Owner Tickets');
             await channel.setParent(category.id, { lockPermissions: false });
         } else if (level === 'staff') {
+            if (!currentServer) {
+                const embed = new EmbedBuilder()
+                    .setColor('#df0000')
+                    .setDescription(`Ticket level changed to <@&${levelId}>!`);
+                await interaction.reply({ embeds: [embed] });
+
+                const category = await Client.channels.cache.get(JSON.parse(readFileSync(resolve('./src/config/channels.json')))['ticketCategory']);
+                await channel.setParent(category.id, { lockPermissions: false });
+                return;
+            }
+
             const serverNotifications = JSON.parse(readFileSync(resolve(`./ticket-notifications/${currentServer}.json`)));
 
             const staff = await channel.guild.roles.cache
@@ -672,7 +683,7 @@ export class TicketManager {
             } else {
                 const embed = new EmbedBuilder()
                     .setColor('#df0000')
-                    .setDescription('Ticket level changed to `Staff`!');
+                    .setDescription(`Ticket level changed to <@&${levelId}>!`);
                 await interaction.reply({ embeds: [embed] });
             }
 

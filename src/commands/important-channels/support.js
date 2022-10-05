@@ -7,6 +7,7 @@ import TicketModal from './support-modal.js';
 export default {
     extra: {
         hidden: true,
+        inHelp: false,
     },
     async TicketButton() {
         return new ActionRowBuilder().addComponents(

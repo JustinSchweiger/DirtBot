@@ -8,6 +8,7 @@ import { Database } from '../../helper/VerificationDatabase.js';
 export default {
     extra: {
         hidden: true,
+        inHelp: false,
     },
     async showModal(interaction) {
         const modal = new ModalBuilder()

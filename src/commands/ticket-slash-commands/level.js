@@ -41,6 +41,8 @@ export default {
         ),
     extra: {
         hidden: false,
+        inHelp: true,
+        ticketCommand: true,
     },
     async execute(interaction) {
         if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;
@@ -48,7 +50,7 @@ export default {
         const channel = interaction.guild.channels.cache.get(interaction.channel.id);
         const choice = interaction.options.getString('level');
         const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
-        const ping = interaction.options.getBoolean('ping') || true;
+        const ping = interaction.options.getBoolean('ping') ?? true;
 
         switch (choice) {
             case 'staff':

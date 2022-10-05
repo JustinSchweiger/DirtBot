@@ -8,6 +8,7 @@ import { TicketNotificationFiles } from '../../helper/TicketNotificationFiles.js
 export default {
     extra: {
         hidden: true,
+        inHelp: false,
     },
     async TicketNotificationsButtons(ticketNotifications) {
         const buttons = ticketNotifications.map((ticketNotification) => {

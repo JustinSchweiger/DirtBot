@@ -1,5 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
 import { TicketManager } from '../../helper/TicketManager.js';
 
@@ -52,6 +54,8 @@ export default {
     },
     extra: {
         hidden: false,
+        inHelp: true,
+        ticketCommand: true,
     },
     async execute(interaction) {
         if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;

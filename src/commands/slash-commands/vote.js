@@ -10,6 +10,7 @@ export default {
         .setDescription('Shows the vote links.'),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async getEmbed() {
         await GitLabFile.serve('vote.json');

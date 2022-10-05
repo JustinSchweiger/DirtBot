@@ -9,7 +9,7 @@ export class Database {
             conn = await mysql.createConnection({
                 host: process.env.HOST,
                 user: process.env.USER,
-                database: process.env.DATABASE,
+                database: process.env.VERIFICATION_DATABASE,
             });
         } catch (err) {
             await Logger.log('The verification database can\'t be reached!', Level.ERROR);

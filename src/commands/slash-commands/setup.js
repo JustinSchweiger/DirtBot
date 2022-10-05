@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { EmbedBuilder } from 'discord.js';
-import { existsSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
 import { Logger } from '../../helper/Logger.js';
@@ -28,6 +28,11 @@ export default {
                     option => option
                         .setName('staff')
                         .setDescription('The Staff role. Players with this role will see tickets.')
+                        .setRequired(true),
+                ).addRoleOption(
+                    option => option
+                        .setName('moderator')
+                        .setDescription('The Moderator role. Players with this role will be able to see new applications.')
                         .setRequired(true),
                 ).addRoleOption(
                     option => option
@@ -92,6 +97,16 @@ export default {
                         .setRequired(true),
                 ).addChannelOption(
                     option => option
+                        .setName('application-category')
+                        .setDescription('The category under which new applications will be created.')
+                        .setRequired(true),
+                ).addChannelOption(
+                    option => option
+                        .setName('application-log')
+                        .setDescription('The channel in which to post application logs.')
+                        .setRequired(true),
+                ).addChannelOption(
+                    option => option
                         .setName('quick-support')
                         .setDescription('The forum for quick support.')
                         .setRequired(true),
@@ -115,10 +130,16 @@ export default {
                         .setName('info')
                         .setDescription('The channel in which to send the info embed.')
                         .setRequired(true),
+                ).addChannelOption(
+                    option => option
+                        .setName('applications')
+                        .setDescription('The channel in which to send the application embed.')
+                        .setRequired(true),
                 ),
         ),
     extra: {
         hidden: false,
+        inHelp: true,
     },
     async execute(interaction) {
         if (interaction.options.getSubcommand() === 'messages') {
@@ -139,6 +160,7 @@ export default {
             const roles = {
                 verified: interaction.options.getRole('verified').id,
                 staff: interaction.options.getRole('staff').id,
+                moderator: interaction.options.getRole('moderator').id,
                 admin: interaction.options.getRole('admin').id,
                 networkAdmin: interaction.options.getRole('network-admin').id,
                 manager: interaction.options.getRole('manager').id,
@@ -185,11 +207,14 @@ export default {
                 'ticketNotificationsChannel': interaction.options.getChannel('ticket-notifications').id,
                 'supportChannel': interaction.options.getChannel('support').id,
                 'ticketCategory': interaction.options.getChannel('ticket-category').id,
+                'applicationCategory': interaction.options.getChannel('application-category').id,
+                'applicationLogChannel': interaction.options.getChannel('application-log').id,
                 'quickSupportChannel': interaction.options.getChannel('quick-support').id,
                 'punishmentAppealsChannel': interaction.options.getChannel('punishment-appeals').id,
                 'verificationChannel': interaction.options.getChannel('verification').id,
                 'roleAssignmentChannel': interaction.options.getChannel('role-assignment').id,
                 'infoChannel': interaction.options.getChannel('info').id,
+                'applicationChannel': interaction.options.getChannel('applications').id,
             };
 
             writeFileSync(resolve('./src/config/channels.json'), JSON.stringify(channelIds, null, 2));
