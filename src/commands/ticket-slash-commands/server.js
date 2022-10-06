@@ -21,6 +21,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('server')
         .setDescription('Changes the server of a ticket.')
+        .setDefaultMemberPermissions(0)
         .addStringOption(
             option => option
                 .setName('server')

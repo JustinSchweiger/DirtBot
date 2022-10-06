@@ -9,6 +9,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('removerole')
         .setDescription('Removes a role from the role-assignment channel.')
+        .setDefaultMemberPermissions(0)
         .addRoleOption(
             option => option
                 .setName('role')

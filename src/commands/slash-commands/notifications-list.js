@@ -9,6 +9,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('notifications-list')
         .setDescription('Lists someones ticket notifications.')
+        .setDefaultMemberPermissions(0)
         .addUserOption(
             option => option
                 .setName('target')

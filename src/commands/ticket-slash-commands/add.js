@@ -7,6 +7,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('add')
         .setDescription('Adds a player to a ticket')
+        .setDefaultMemberPermissions(0)
         .addUserOption(
             option => option
                 .setName('player')

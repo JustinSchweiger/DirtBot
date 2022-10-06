@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { EmbedBuilder } from 'discord.js';
-import { existsSync, writeFileSync } from 'fs';
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
 import { Logger } from '../../helper/Logger.js';
@@ -10,6 +10,9 @@ export default {
     data: new SlashCommandBuilder()
         .setName('setup')
         .setDescription('Setup the bot.')
+        .setDefaultMemberPermissions(
+            PermissionsBitField.Flags.ManageRoles,
+        )
         .addSubcommand(
             subcommand => subcommand
                 .setName('messages')
@@ -20,6 +23,11 @@ export default {
                 .setName('roles')
                 .setDescription('Setup the roles.')
                 .addRoleOption(
+                    option => option
+                        .setName('everyone')
+                        .setDescription('The role for everyone.')
+                        .setRequired(true),
+                ).addRoleOption(
                     option => option
                         .setName('verified')
                         .setDescription('The Verified role.')
@@ -163,6 +171,7 @@ export default {
             await interaction.editReply({ content: ':white_check_mark: All messages have been send in their respective channels.', ephemeral: true });
         } else if (interaction.options.getSubcommand() === 'roles') {
             const roles = {
+                everyone: interaction.options.getRole('everyone').id,
                 verified: interaction.options.getRole('verified').id,
                 staff: interaction.options.getRole('staff').id,
                 moderator: interaction.options.getRole('moderator').id,

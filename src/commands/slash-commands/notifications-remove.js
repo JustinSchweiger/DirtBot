@@ -22,6 +22,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('notifications-remove')
         .setDescription('Removes ticket notifications from someone.')
+        .setDefaultMemberPermissions(0)
         .addUserOption(
             option => option
                 .setName('target')

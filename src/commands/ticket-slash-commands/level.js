@@ -7,6 +7,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('level')
         .setDescription('Changes the level of a ticket.')
+        .setDefaultMemberPermissions(0)
         .addStringOption(
             option => option
                 .setName('level')

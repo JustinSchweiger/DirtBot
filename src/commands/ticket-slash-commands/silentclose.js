@@ -6,7 +6,8 @@ import { TicketManager } from '../../helper/TicketManager.js';
 export default {
     data: new SlashCommandBuilder()
         .setName('silentclose')
-        .setDescription('Silently closes a ticket without notifying the author'),
+        .setDescription('Silently closes a ticket without notifying the author')
+        .setDefaultMemberPermissions(0),
     extra: {
         hidden: false,
         inHelp: true,

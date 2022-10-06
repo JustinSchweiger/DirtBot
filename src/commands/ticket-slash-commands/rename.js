@@ -7,6 +7,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('rename')
         .setDescription('Renames a ticket.')
+        .setDefaultMemberPermissions(0)
         .addStringOption(
             option => option
                 .setName('name')

@@ -1,4 +1,4 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { EmbedBuilder, PermissionsBitField, SlashCommandBuilder } from 'discord.js';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
@@ -8,7 +8,10 @@ import { Logger } from '../../helper/Logger.js';
 export default {
     data: new SlashCommandBuilder()
         .setName('reload')
-        .setDescription('Reloads the commands. Needed for choices.'),
+        .setDescription('Reloads the commands. Needed for choices.')
+        .setDefaultMemberPermissions(
+            PermissionsBitField.Flags.ManageRoles,
+        ),
     extra: {
         hidden: true,
         inHelp: true,

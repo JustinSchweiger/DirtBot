@@ -9,6 +9,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('verify')
         .setDescription('Verify a user manually if discord-link fails.')
+        .setDefaultMemberPermissions(0)
         .addUserOption(
             option => option
                 .setName('user')

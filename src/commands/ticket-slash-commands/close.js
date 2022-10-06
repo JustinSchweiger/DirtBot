@@ -1,5 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
 import { TicketManager } from '../../helper/TicketManager.js';
 
@@ -7,6 +9,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('close')
         .setDescription('Sends a reason and closes the ticket after 24 hours.')
+        .setDefaultMemberPermissions(0)
         .addStringOption(
             option => option
                 .setName('reason')

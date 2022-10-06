@@ -9,6 +9,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('addrole')
         .setDescription('Adds a role to the role-assignment channel.')
+        .setDefaultMemberPermissions(0)
         .addRoleOption(
             option => option
                 .setName('role')

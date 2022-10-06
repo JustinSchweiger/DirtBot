@@ -1,10 +1,13 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { Level, Logger } from '../../helper/Logger.js';
 
 export default {
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Clear a specified amount of messages in the channel.')
+        .setDefaultMemberPermissions(0)
         .addIntegerOption(
             option => option
                 .setName('amount')

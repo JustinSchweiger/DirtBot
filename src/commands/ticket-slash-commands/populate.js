@@ -22,6 +22,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('populate')
         .setDescription('Changes the server, username and name of a ticket.')
+        .setDefaultMemberPermissions(0)
         .addStringOption(
             option => option
                 .setName('server')
