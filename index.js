@@ -1,6 +1,6 @@
 import { Gitlab } from '@gitbeaker/node';
 import { CronJob } from 'cron';
-import { Client, IntentsBitField, MessageType } from 'discord.js';
+import { ActivityType, Client, IntentsBitField, MessageType } from 'discord.js';
 import { readdirSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -54,6 +54,13 @@ export const __fileName = fileURLToPath(import.meta.url);
 
 client.on('ready', async () => {
     await LoadCommands.loadCommands();
+    client.user.setPresence({
+        activities: [{
+            name: 'over DirtCraft',
+            type: ActivityType.Watching,
+        }],
+        status: 'online',
+    });
 });
 
 client.on('interactionCreate', async interaction => {
