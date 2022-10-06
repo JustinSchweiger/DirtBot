@@ -70,7 +70,7 @@ export default {
         const language = interaction.fields.getTextInputValue('dev-modal-language');
         const api = interaction.fields.getTextInputValue('dev-modal-api');
 
-        const extra = Extra.get();
+        const extra = await Extra.get();
         const newChannel = await ApplicationManager.createNewDevApp(interaction, age, time, experience, language, api);
         const embed = new EmbedBuilder()
             .setColor('#df0000')

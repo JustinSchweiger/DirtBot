@@ -58,11 +58,11 @@ export default {
         const label = interaction.options.getString('label');
         const style = interaction.options.getString('style');
 
-        if (!existsSync(resolve('./src/assets/role-assignments.json'))) {
-            writeFileSync(resolve('./src/assets/role-assignments.json'), JSON.stringify([]));
+        if (!existsSync(resolve('./assets/role-assignments.json'))) {
+            writeFileSync(resolve('./assets/role-assignments.json'), JSON.stringify([]));
         }
 
-        const roleAssignments = JSON.parse(readFileSync(resolve('./src/assets/role-assignments.json')));
+        const roleAssignments = JSON.parse(readFileSync(resolve('./assets/role-assignments.json')));
 
         if (roleAssignments.find(roleAssignment => roleAssignment.role === role.id)) {
             await interaction.reply({ content: `${role} is already in the role-assignment channel.`, ephemeral: true });
@@ -78,7 +78,7 @@ export default {
             label: label,
             style: style,
         });
-        writeFileSync(resolve('./src/assets/role-assignments.json'), JSON.stringify(roleAssignments, null, 2));
+        writeFileSync(resolve('./assets/role-assignments.json'), JSON.stringify(roleAssignments, null, 2));
 
         await Client.commands.set(role.id, RoleAssignment);
         await RoleAssignment.ReloadButtons();

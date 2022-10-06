@@ -75,7 +75,7 @@ export default {
         const why = interaction.fields.getTextInputValue('staff-modal-why');
         const experience = interaction.fields.getTextInputValue('staff-modal-experience');
 
-        const extra = Extra.get();
+        const extra = await Extra.get();
         const newChannel = await ApplicationManager.createNewStaffApp(interaction, username, server, age, why, experience);
         const embed = new EmbedBuilder()
             .setColor('#df0000')

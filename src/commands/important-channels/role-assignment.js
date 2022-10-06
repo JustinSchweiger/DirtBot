@@ -10,9 +10,9 @@ export default {
         inHelp: false,
     },
     async ReloadButtons() {
-        const roleAssignmentChannel = Client.channels.cache.get(JSON.parse(readFileSync(resolve('./src/assets/channels.json'))).roleAssignmentChannel);
+        const roleAssignmentChannel = Client.channels.cache.get(JSON.parse(readFileSync(resolve('./src/config/channels.json'))).roleAssignmentChannel);
         const message = await roleAssignmentChannel.messages.fetch({ limit: 1 });
-        const roleAssignments = JSON.parse(readFileSync(resolve('./src/assets/role-assignments.json')));
+        const roleAssignments = JSON.parse(readFileSync(resolve('./assets/role-assignments.json')));
 
         const buttons = roleAssignments.map(role => {
             return new ButtonBuilder()
@@ -52,7 +52,7 @@ export default {
     },
     async execute(interaction) {
         const roleToAdd = interaction.guild.roles.cache.get(interaction.customId);
-        const roleAssignments = JSON.parse(readFileSync(resolve('./src/assets/role-assignments.json')));
+        const roleAssignments = JSON.parse(readFileSync(resolve('./assets/role-assignments.json')));
         const role = roleAssignments.find(r => r['role'] === interaction.customId);
 
         if (interaction.member.roles.cache.has(roleToAdd.id)) {
