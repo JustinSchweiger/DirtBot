@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { EmbedBuilder, PermissionsBitField } from 'discord.js';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
 import { Logger } from '../../helper/Logger.js';
@@ -31,6 +31,11 @@ export default {
                     option => option
                         .setName('verified')
                         .setDescription('The Verified role.')
+                        .setRequired(true),
+                ).addRoleOption(
+                    option => option
+                        .setName('donator')
+                        .setDescription('The Donator role.')
                         .setRequired(true),
                 ).addRoleOption(
                     option => option
@@ -173,6 +178,7 @@ export default {
             const roles = {
                 everyone: interaction.options.getRole('everyone').id,
                 verified: interaction.options.getRole('verified').id,
+                donator: interaction.options.getRole('donator').id,
                 staff: interaction.options.getRole('staff').id,
                 moderator: interaction.options.getRole('moderator').id,
                 admin: interaction.options.getRole('admin').id,
