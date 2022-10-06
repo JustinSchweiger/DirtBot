@@ -6,6 +6,7 @@ import AcceptApplication from '../commands/application-commands/accept-applicati
 import DenyApplicationModal from '../commands/application-commands/deny-application-modal.js';
 import DenyApplication from '../commands/application-commands/deny-application.js';
 import NoLongerStaff from '../commands/application-commands/no-longer-staff.js';
+import AnnouncementModal from '../commands/important-channels/announcement-modal.js';
 import Application from '../commands/important-channels/applications.js';
 import DevAppModal from '../commands/important-channels/dev-app-modal.js';
 import RoleAssignment from '../commands/important-channels/role-assignment.js';
@@ -55,14 +56,18 @@ export class RegisterExtraCommands {
     }
 
     static async roleAssignmentButtons() {
-        if (!existsSync(resolve('./src/assets/role-assignments.json'))) {
+        if (!existsSync(resolve('./assets/role-assignments.json'))) {
 
             return;
         }
 
-        const roleAssignments = JSON.parse(readFileSync(resolve('./src/assets/role-assignments.json')));
+        const roleAssignments = JSON.parse(readFileSync(resolve('./assets/role-assignments.json')));
         roleAssignments.forEach(role => {
             Client.commands.set(role['role'], RoleAssignment);
         });
+    }
+
+    static async announcementModal() {
+        await Client.commands.set('announcement-modal', AnnouncementModal);
     }
 }

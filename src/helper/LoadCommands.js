@@ -64,6 +64,7 @@ export class LoadCommands {
         await RegisterExtraCommands.verification();
         await RegisterExtraCommands.roleAssignmentButtons();
         await RegisterExtraCommands.applications();
+        await RegisterExtraCommands.announcementModal();
 
         const guild_ids = Client.guilds.cache.map(guild => guild.id);
         const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);

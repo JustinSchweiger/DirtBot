@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { EmbedBuilder } from 'discord.js';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
 import { Logger } from '../../helper/Logger.js';
@@ -61,6 +61,11 @@ export default {
                 .setName('channels')
                 .setDescription('Setup the channels for the bot.')
                 .addChannelOption(
+                    option => option
+                        .setName('announcements')
+                        .setDescription('The channel in which to post announcements.')
+                        .setRequired(true),
+                ).addChannelOption(
                     option => option
                         .setName('bot-log')
                         .setDescription('The channel in which to post logs.')
@@ -200,6 +205,7 @@ export default {
             interaction.reply({ content: ':white_check_mark: The roles have been set!', ephemeral: true });
         } else if (interaction.options.getSubcommand() === 'channels') {
             const channelIds = {
+                'announcementChannel': interaction.options.getChannel('announcements').id,
                 'botLogChannel': interaction.options.getChannel('bot-log').id,
                 'ticketLogChannel': interaction.options.getChannel('ticket-log').id,
                 'transcriptsChannel': interaction.options.getChannel('transcripts').id,
