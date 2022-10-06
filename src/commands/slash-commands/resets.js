@@ -16,7 +16,9 @@ export default {
         await GitLabFile.serve('servers.json');
         const serversPath = resolve('./assets/servers.json');
 
-        const serversJson = JSON.parse(readFileSync(serversPath).toString());
+        const serversJson = JSON.parse(readFileSync(serversPath).toString()).sort((a, b) => {
+            return new Date(b['last-wiped']) - new Date(a['last-wiped']);
+        });
         const stats = statSync(serversPath);
         const date = new Date(stats.mtime);
 
@@ -24,7 +26,7 @@ export default {
             {
                 name: '__Modpack__',
                 value: serversJson
-                    .map(server => server['server'])
+                    .map(server => server['version-name'])
                     .join('\n'),
                 inline: true,
             },
