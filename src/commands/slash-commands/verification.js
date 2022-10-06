@@ -24,8 +24,9 @@ export default {
                 '**Doing so will get you the following perks:**\n' +
                 '\n' +
                 `    ➡ Gives you the special role <@&${roles.verified}>.\n` +
-                '    ➡ You can talk in gamechat channels now.\n' +
-                '    ➡ You can use commands in gamechats now (**type !help**).\n' +
+                '    ➡ You can now make new forum entries.\n' +
+                '    ➡ You can now talk in gamechat channels.\n' +
+                '    ➡ You can now use commands in gamechats (**type !help**).\n' +
                 `    ➡ If you have bought a rank you get the <@&${roles.donator}> role.\n` +
                 '    ➡ Your username is automatically filled when you open tickets.\n',
             )
