@@ -2,6 +2,7 @@ import { ActionRowBuilder, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInp
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
+import { Minecraft } from '../../helper/Minecraft.js';
 import { TicketManager } from '../../helper/TicketManager.js';
 import { Database } from '../../helper/VerificationDatabase.js';
 
@@ -40,6 +41,7 @@ export default {
             .setLabel('Problem')
             .setPlaceholder('Describe your problem here.')
             .setStyle(TextInputStyle.Paragraph)
+            .setMaxLength(1000)
             .setRequired(true);
 
         const actionRowUsername = new ActionRowBuilder().addComponents(userName);
@@ -59,7 +61,19 @@ export default {
         const shortDescription = interaction.fields.getTextInputValue('ticket-modal-short-description').replaceAll(' ', '-') || undefined;
         const problem = interaction.fields.getTextInputValue('ticket-modal-problem');
         const author = interaction.user;
-        const uuid = interaction.member.roles.cache.has(JSON.parse(readFileSync(resolve('./src/config/roles.json')))['verified']) ? await Database.getUuidFromDiscordId(interaction.user.id) : await Database.getUuidFromUsername(username);
+
+        let uuid;
+        const userIsVerified = interaction.member.roles.cache.has(JSON.parse(readFileSync(resolve('./src/config/roles.json')))['verified']);
+        if (!userIsVerified) {
+            uuid = await Minecraft.getUUID(username);
+        } else {
+            uuid = await Database.getUuidFromDiscordId(interaction.user.id);
+
+            if (uuid === 'no-connection') {
+                uuid = await Minecraft.getUUID(username);
+            }
+        }
+
         if (!uuid) {
             await interaction.editReply({ content: 'Please enter a valid username.', ephemeral: true });
             return;

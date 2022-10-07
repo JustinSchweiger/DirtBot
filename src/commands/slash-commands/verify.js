@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { EmbedBuilder } from 'discord.js';
 import { readFileSync } from 'fs';
-import minecraftPlayer from 'minecraft-player';
 import { resolve } from 'path';
+import { Minecraft } from '../../helper/Minecraft.js';
 import { Database as VerificationDatabase } from '../../helper/VerificationDatabase.js';
 
 export default {
@@ -32,9 +32,7 @@ export default {
         const username = interaction.options.getString('username');
         const user = interaction.options.getUser('user');
 
-        const uuid = await minecraftPlayer(username).catch(() => {
-            return undefined;
-        });
+        const uuid = await Minecraft.getUUID(username);
 
         if (!uuid) {
             await interaction.editReply({

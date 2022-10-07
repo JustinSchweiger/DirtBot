@@ -1,6 +1,6 @@
-import minecraftPlayer from 'minecraft-player';
 import mysql from 'mysql2/promise';
 import { Level, Logger } from './Logger.js';
+import { Minecraft } from './Minecraft.js';
 
 export class Database {
     static async connect() {
@@ -79,17 +79,15 @@ export class Database {
             return '';
         }
 
-        const result = await minecraftPlayer(res[0].uuid).catch(() => {
-            return undefined;
-        });
-
+        const result = await Minecraft.getUsername(res[0].uuid);
+        console.log(result);
         if (!result) return undefined;
         return result.username;
     }
 
     static async getUuidFromDiscordId(discordId) {
         const connection = await this.connect();
-        if (!connection) return '';
+        if (!connection) return 'no-connection';
 
         const [res] = await connection.execute('SELECT uuid FROM verification WHERE discordid = ?', [discordId]);
         connection.end();
@@ -99,14 +97,5 @@ export class Database {
         }
 
         return res[0].uuid;
-    }
-
-    static async getUuidFromUsername(username) {
-        const res = await minecraftPlayer(username).catch(() => {
-            return undefined;
-        });
-
-        if (!res) return undefined;
-        return res.uuid;
     }
 }

@@ -8,6 +8,7 @@ import { Client } from '../../index.js';
 import review from '../commands/slash-commands/review.js';
 import { Extra } from './Extra.js';
 import { File } from './GetFileFromGitlab.js';
+import { Minecraft } from './Minecraft.js';
 
 export class TicketManager {
     static async createNewTicket(interaction, username, problem, author, uuid, shortDescription) {
@@ -100,6 +101,7 @@ export class TicketManager {
         const embed = new EmbedBuilder()
             .setColor('#df0000')
             .setTitle(`${extra['bulletpoint']} DirtCraft Ticket System ${extra['bulletpoint']}`)
+            .setThumbnail(await Minecraft.getAvatar(uuid))
             .addFields([
                 {
                     name: '__**Ticket Message:**__',
@@ -178,6 +180,7 @@ export class TicketManager {
         const embed = new EmbedBuilder()
             .setColor('#df0000')
             .setTitle(`${extra['bulletpoint']} DirtCraft Ticket System ${extra['bulletpoint']}`)
+            .setThumbnail(await Minecraft.getAvatar(embedInfo.uuid))
             .addFields([
                 {
                     name: '__**Ticket Message:**__',
@@ -273,6 +276,7 @@ export class TicketManager {
 
     static async changeServer(newServer, channel, user) {
         const ticket = JSON.parse(readFileSync(resolve(`./tickets/${channel.id}.json`)));
+        const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
         const updatedTicket = JSON.parse(JSON.stringify(ticket));
         updatedTicket.server = newServer;
 
@@ -291,10 +295,16 @@ export class TicketManager {
                 await channel.guild.channels.create({
                     type: ChannelType.GuildCategory,
                     name: newServerLabel,
-                    permissionOverwrites: [{
-                        id: channel.guild.roles.everyone,
-                        deny: [PermissionFlagsBits.ViewChannel],
-                    }],
+                    permissionOverwrites: [
+                        {
+                            id: channel.guild.roles.everyone,
+                            deny: [PermissionFlagsBits.ViewChannel],
+                        },
+                        {
+                            id: roles['staff'],
+                            allow: [PermissionFlagsBits.ViewChannel],
+                        },
+                    ],
                 });
             }
 
@@ -403,6 +413,7 @@ export class TicketManager {
 
     static async prepareCloseTicket(channel, user, reason) {
         const ticket = JSON.parse(readFileSync(resolve(`./tickets/${channel.id}.json`)));
+        const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
 
         await this.logTicketChange('close', reason, user, channel, ticket.ticketId);
 
@@ -418,10 +429,16 @@ export class TicketManager {
             await channel.guild.channels.create({
                 type: ChannelType.GuildCategory,
                 name: '🎫 Pending Review',
-                permissionOverwrites: [{
-                    id: channel.guild.roles.everyone,
-                    deny: [PermissionFlagsBits.ViewChannel],
-                }],
+                permissionOverwrites: [
+                    {
+                        id: channel.guild.roles.everyone,
+                        deny: [PermissionFlagsBits.ViewChannel],
+                    },
+                    {
+                        id: roles['staff'],
+                        allow: [PermissionFlagsBits.ViewChannel],
+                    },
+                ],
             });
         }
 
@@ -461,7 +478,7 @@ export class TicketManager {
                 },
                 {
                     name: '\u200b',
-                    value: `[Click Here](${process.env.FRONTEND_URL}/?ticket=${ticket.ticketUuid}) to view the transcript.\n `,
+                    value: `🧾 [Click Here](${process.env.FRONTEND_URL}/?ticket=${ticket.ticketUuid}) to view the transcript.\n `,
                     inline: false,
                 },
             ]).setFooter({
@@ -523,6 +540,7 @@ export class TicketManager {
 
     static async changeLevel(channel, user, levelId, level, interaction, ping) {
         const ticket = JSON.parse(readFileSync(resolve(`./tickets/${channel.id}.json`)));
+        const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
         const currentServer = ticket.server;
 
         if (level === 'admin') {
@@ -589,10 +607,16 @@ export class TicketManager {
                 await channel.guild.channels.create({
                     type: ChannelType.GuildCategory,
                     name: '🔴 Network Admin Tickets',
-                    permissionOverwrites: [{
-                        id: channel.guild.roles.everyone,
-                        deny: [PermissionFlagsBits.ViewChannel],
-                    }],
+                    permissionOverwrites: [
+                        {
+                            id: channel.guild.roles.everyone,
+                            deny: [PermissionFlagsBits.ViewChannel],
+                        },
+                        {
+                            id: roles['staff'],
+                            allow: [PermissionFlagsBits.ViewChannel],
+                        },
+                    ],
                 });
             }
 
@@ -619,10 +643,16 @@ export class TicketManager {
                 await channel.guild.channels.create({
                     type: ChannelType.GuildCategory,
                     name: '🟡 Manager Tickets',
-                    permissionOverwrites: [{
-                        id: channel.guild.roles.everyone,
-                        deny: [PermissionFlagsBits.ViewChannel],
-                    }],
+                    permissionOverwrites: [
+                        {
+                            id: channel.guild.roles.everyone,
+                            deny: [PermissionFlagsBits.ViewChannel],
+                        },
+                        {
+                            id: roles['staff'],
+                            allow: [PermissionFlagsBits.ViewChannel],
+                        },
+                    ],
                 });
             }
 
@@ -649,10 +679,16 @@ export class TicketManager {
                 await channel.guild.channels.create({
                     type: ChannelType.GuildCategory,
                     name: '⚪ Owner Tickets',
-                    permissionOverwrites: [{
-                        id: channel.guild.roles.everyone,
-                        deny: [PermissionFlagsBits.ViewChannel],
-                    }],
+                    permissionOverwrites: [
+                        {
+                            id: channel.guild.roles.everyone,
+                            deny: [PermissionFlagsBits.ViewChannel],
+                        },
+                        {
+                            id: roles['staff'],
+                            allow: [PermissionFlagsBits.ViewChannel],
+                        },
+                    ],
                 });
             }
 
@@ -695,10 +731,16 @@ export class TicketManager {
                 await channel.guild.channels.create({
                     type: ChannelType.GuildCategory,
                     name: serverLabel,
-                    permissionOverwrites: [{
-                        id: channel.guild.roles.everyone,
-                        deny: [PermissionFlagsBits.ViewChannel],
-                    }],
+                    permissionOverwrites: [
+                        {
+                            id: channel.guild.roles.everyone,
+                            deny: [PermissionFlagsBits.ViewChannel],
+                        },
+                        {
+                            id: roles['staff'],
+                            allow: [PermissionFlagsBits.ViewChannel],
+                        },
+                    ],
                 });
             }
 

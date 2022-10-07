@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { readFileSync } from 'fs';
-import minecraftPlayer from 'minecraft-player';
 import { resolve } from 'path';
 import { File } from '../../helper/GetFileFromGitlab.js';
+import { Minecraft } from '../../helper/Minecraft.js';
 import { TicketManager } from '../../helper/TicketManager.js';
 
 export default {
@@ -56,9 +56,7 @@ export default {
         const newTicketName = interaction.options.getString('rename') ? interaction.options.getString('rename').replaceAll(' ', '-') + '-' + ticket.ticketId : undefined;
         const newUsername = interaction.options.getString('username');
 
-        const uuid = await minecraftPlayer(newUsername).catch(() => {
-            return undefined;
-        });
+        const uuid = await Minecraft.getUUID(newUsername);
 
         if (!uuid) {
             await interaction.reply({ content: 'The username you entered is invalid!', ephemeral: true });

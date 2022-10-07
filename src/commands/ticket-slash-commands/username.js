@@ -1,7 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { readFileSync } from 'fs';
-import minecraftPlayer from 'minecraft-player';
-import { resolve } from 'path';
+import { Minecraft } from '../../helper/Minecraft.js';
 import { TicketManager } from '../../helper/TicketManager.js';
 
 export default {
@@ -27,9 +25,7 @@ export default {
         const channel = interaction.guild.channels.cache.get(interaction.channel.id);
         const newUsername = interaction.options.getString('username');
 
-        const uuid = await minecraftPlayer(newUsername).catch(() => {
-            return undefined;
-        });
+        const uuid = await Minecraft.getUUID(newUsername);
 
         if (!uuid) {
             await interaction.editReply({ content: 'The username you entered is invalid!', ephemeral: true });
