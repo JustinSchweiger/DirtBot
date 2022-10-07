@@ -135,6 +135,11 @@ export default {
                         .setRequired(true),
                 ).addChannelOption(
                     option => option
+                        .setName('punishment-appeals-category')
+                        .setDescription('The category under which new appeals are created.')
+                        .setRequired(true),
+                ).addChannelOption(
+                    option => option
                         .setName('verification')
                         .setDescription('The channel in which to send the verification embed.')
                         .setRequired(true),
@@ -232,6 +237,7 @@ export default {
                 'applicationLogChannel': interaction.options.getChannel('application-log').id,
                 'quickSupportChannel': interaction.options.getChannel('quick-support').id,
                 'punishmentAppealsChannel': interaction.options.getChannel('punishment-appeals').id,
+                'punishmentAppealsCategory': interaction.options.getChannel('punishment-appeals-category').id,
                 'verificationChannel': interaction.options.getChannel('verification').id,
                 'roleAssignmentChannel': interaction.options.getChannel('role-assignment').id,
                 'infoChannel': interaction.options.getChannel('info').id,
@@ -244,12 +250,12 @@ export default {
             const fields = [
                 {
                     name: '\u200b',
-                    value: Object.keys(channelIds).map(id => `\`${id}\``).join('\n'),
+                    value: Object.keys(channelIds).join('\n'),
                     inline: true,
                 },
                 {
                     name: '\u200b',
-                    value: Object.keys(channelIds).map(() => '>>').join('\n'),
+                    value: Object.keys(channelIds).map(() => '➡').join('\n'),
                     inline: true,
                 },
                 {

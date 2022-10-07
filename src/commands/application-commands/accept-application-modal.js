@@ -54,8 +54,11 @@ export default {
             embed.setThumbnail(extra['dev-thumbnail']);
         }
 
-        interaction.guild.members.cache.get(application.userId).send({
-            embeds: [embed],
-        });
+        const user = interaction.guild.members.cache.get(application.userId);
+        if (user) {
+            user.send({
+                embeds: [embed],
+            });
+        }
     },
 };

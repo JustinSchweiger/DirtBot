@@ -9,6 +9,7 @@ export class Database {
             conn = await mysql.createConnection({
                 host: process.env.HOST,
                 user: process.env.USER,
+                password: process.env.PASSWORD,
                 database: process.env.VERIFICATION_DATABASE,
             });
         } catch (err) {
@@ -85,7 +86,8 @@ export class Database {
 
         const result = await Minecraft.getUsername(res[0].uuid);
         if (!result) return undefined;
-        return result.username;
+
+        return result;
     }
 
     static async getUuidFromDiscordId(discordId) {
@@ -100,5 +102,19 @@ export class Database {
         }
 
         return res[0].uuid;
+    }
+
+    static async getDiscordIdFromUuid(uuid) {
+        const connection = await this.connect();
+        if (!connection) return 'no-connection';
+
+        const [res] = await connection.execute('SELECT discordid FROM verification WHERE uuid = ?', [uuid]);
+        connection.end();
+
+        if (res.length === 0) {
+            return '';
+        }
+
+        return res[0].discordid;
     }
 }

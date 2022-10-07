@@ -6,3 +6,5 @@ src/config/*.json
 /ticket-notifications/*.json
 /tickets/*.html
 /tickets/*.json
+/appeals/*.json
+/transcripts/*.html

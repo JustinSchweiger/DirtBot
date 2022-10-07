@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import { Client } from '../../index.js';
 import Application from '../commands/important-channels/applications.js';
 import Info from '../commands/important-channels/info.js';
+import PunishmentAppeal from '../commands/important-channels/punishment-appeal.js';
 import RoleAssignment from '../commands/important-channels/role-assignment.js';
 import Support from '../commands/important-channels/support.js';
 import TickedNotifications from '../commands/important-channels/ticket-notifications.js';
@@ -40,7 +41,18 @@ export class Setup {
 
         const applicationChannel = await Client.channels.fetch(channelIds['applicationChannel']);
         await application(applicationChannel);
+
+        const punishmentAppealsChannel = await Client.channels.fetch(channelIds['punishmentAppealsChannel']);
+        await punishmentAppeals(punishmentAppealsChannel);
     }
+}
+
+async function punishmentAppeals(channel) {
+    await Client.commands.set('ban-appeal', PunishmentAppeal);
+    await Client.commands.set('mute-appeal', PunishmentAppeal);
+    const punishmentAppealEmbed = await PunishmentAppeal.AppealEmbed();
+    const buttons = await PunishmentAppeal.AppealButtons();
+    channel.send({ embeds: [punishmentAppealEmbed], components: [buttons] });
 }
 
 async function info(channel) {
@@ -84,16 +96,15 @@ async function verification(channel) {
 }
 
 async function roleAssignment(channel) {
-    if (existsSync(resolve('./src/config/role-assignments.json'))) {
-        const roleAssignments = JSON.parse(readFileSync(resolve('./src/config/role-assignments.json')));
+    if (existsSync(resolve('./assets/role-assignments.json'))) {
+        const roleAssignments = JSON.parse(readFileSync(resolve('./assets/role-assignments.json')));
         roleAssignments.forEach(role => {
             Client.commands.set(role['role'], RoleAssignment);
         });
 
         const roleAssignmentEmbed = await RoleAssignment.RoleAssignmentEmbed();
         await channel.send({ embeds: [roleAssignmentEmbed] });
-        await RoleAssignment.ReloadButtons();
-        return;
+        return RoleAssignment.ReloadButtons();
     }
 
     const roleAssignmentEmbed = await RoleAssignment.RoleAssignmentEmbed();

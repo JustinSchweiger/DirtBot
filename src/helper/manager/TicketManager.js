@@ -478,7 +478,7 @@ export class TicketManager {
                 },
                 {
                     name: '\u200b',
-                    value: `🧾 [Click Here](${process.env.FRONTEND_URL}/?ticket=${ticket.ticketUuid}) to view the transcript.\n `,
+                    value: `🧾 [Click Here](${process.env.FRONTEND_URL}/?transcript=${ticket.ticketUuid}) to view the transcript.\n `,
                     inline: false,
                 },
             ]).setFooter({
@@ -488,16 +488,18 @@ export class TicketManager {
 
         const transcriptEmbed = new EmbedBuilder()
             .setColor('#df0000')
-            .setDescription(`[**Ticket #${ticket.ticketId}**](${process.env.FRONTEND_URL}/?ticket=${ticket.ticketUuid}) closed by ${closedBy}`)
+            .setDescription(`[**Ticket #${ticket.ticketId}**](${process.env.FRONTEND_URL}/?transcript=${ticket.ticketUuid}) closed by ${closedBy}`)
             .setTimestamp();
 
         await transcriptChannel.send({ embeds: [transcriptEmbed] });
 
-        await author.send({
-            embeds: [closeEmbed, await review.getEmbed()],
-        });
+        if (author) {
+            author.send({
+                embeds: [closeEmbed, await review.getEmbed()],
+            });
+        }
 
-        writeFileSync(resolve(`./tickets/${ticket.ticketUuid}.html`), transcript);
+        writeFileSync(resolve(`./transcripts/${ticket.ticketUuid}.html`), transcript);
         unlinkSync(resolve(`./tickets/${channel.id}.json`));
     }
 

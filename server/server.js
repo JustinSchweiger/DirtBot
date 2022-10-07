@@ -3,18 +3,17 @@ import { existsSync } from 'fs';
 import { resolve } from 'path';
 
 const app = express();
-const port = 1234;
 
 app.get('/', (req, res) => {
-    const ticket = req.query.ticket;
+    const transcript = req.query.transcript;
 
-    if (!ticket || !existsSync(resolve(`./tickets/${ticket}.html`))) {
+    if (!transcript || !existsSync(resolve(`./transcripts/${transcript}.html`))) {
         return res.sendFile(resolve('./server/templates/page-not-found.html'));
     }
 
-    return res.sendFile(resolve(`./tickets/${ticket}.html`));
+    return res.sendFile(resolve(`./transcripts/${transcript}.html`));
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+app.listen(1234, () => {
+    console.log(`Server listening at ${process.env.FRONTEND_URL}`);
 });
