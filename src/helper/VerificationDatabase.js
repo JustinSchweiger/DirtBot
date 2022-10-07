@@ -84,7 +84,6 @@ export class Database {
         }
 
         const result = await Minecraft.getUsername(res[0].uuid);
-        console.log(result);
         if (!result) return undefined;
         return result.username;
     }
