@@ -2,8 +2,8 @@ import { ActionRowBuilder, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInp
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
+import { TicketManager } from '../../helper/manager/TicketManager.js';
 import { Minecraft } from '../../helper/Minecraft.js';
-import { TicketManager } from '../../helper/TicketManager.js';
 import { Database } from '../../helper/VerificationDatabase.js';
 
 export default {

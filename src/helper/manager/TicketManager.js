@@ -4,11 +4,11 @@ import { EmbedBuilder } from 'discord.js';
 import { existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { Client } from '../../index.js';
-import review from '../commands/slash-commands/review.js';
-import { Extra } from './Extra.js';
-import { File } from './GetFileFromGitlab.js';
-import { Minecraft } from './Minecraft.js';
+import { Client } from '../../../index.js';
+import review from '../../commands/slash-commands/review.js';
+import { Extra } from '../Extra.js';
+import { File } from '../GetFileFromGitlab.js';
+import { Minecraft } from '../Minecraft.js';
 
 export class TicketManager {
     static async createNewTicket(interaction, username, problem, author, uuid, shortDescription) {

@@ -1,9 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
-import { TicketManager } from '../../helper/TicketManager.js';
+import { TicketManager } from '../../helper/manager/TicketManager.js';
 
 export default {
     data: new SlashCommandBuilder()

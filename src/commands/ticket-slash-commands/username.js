@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { TicketManager } from '../../helper/manager/TicketManager.js';
 import { Minecraft } from '../../helper/Minecraft.js';
-import { TicketManager } from '../../helper/TicketManager.js';
 
 export default {
     data: new SlashCommandBuilder()

@@ -2,11 +2,11 @@ import { ChannelType, PermissionFlagsBits } from 'discord-api-types/v10';
 import { ActionRowBuilder, EmbedBuilder } from 'discord.js';
 import { readdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
-import { Client } from '../../index.js';
-import AcceptApplication from '../commands/application-commands/accept-application.js';
-import DenyApplication from '../commands/application-commands/deny-application.js';
-import NoLongerStaff from '../commands/application-commands/no-longer-staff.js';
-import { Extra } from './Extra.js';
+import { Client } from '../../../index.js';
+import AcceptApplication from '../../commands/application-commands/accept-application.js';
+import DenyApplication from '../../commands/application-commands/deny-application.js';
+import NoLongerStaff from '../../commands/application-commands/no-longer-staff.js';
+import { Extra } from '../Extra.js';
 
 export class ApplicationManager {
     static async createNewDevApp(interaction, age, time, experience, language, api) {

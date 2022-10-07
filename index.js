@@ -5,7 +5,7 @@ import { readdirSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { LoadCommands } from './src/helper/LoadCommands.js';
-import { TicketManager } from './src/helper/TicketManager.js';
+import { TicketManager } from './src/helper/manager/TicketManager.js';
 
 new CronJob(
     '0 * * * * *',

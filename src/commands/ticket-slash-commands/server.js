@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { File } from '../../helper/GetFileFromGitlab.js';
-import { TicketManager } from '../../helper/TicketManager.js';
+import { TicketManager } from '../../helper/manager/TicketManager.js';
 
 export default {
     async getChoices() {

@@ -1,8 +1,8 @@
 import { ActionRowBuilder, EmbedBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { ApplicationManager } from '../../helper/ApplicationManager.js';
 import { Extra } from '../../helper/Extra.js';
+import { ApplicationManager } from '../../helper/manager/ApplicationManager.js';
 
 export default {
     extra: {
