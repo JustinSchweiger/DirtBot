@@ -9,7 +9,7 @@ export class Minecraft {
         }
 
         const json = await res.json();
-        return json.id;
+        return json.id.slice(0, 8) + '-' + json.id.slice(8, 12) + '-' + json.id.slice(12, 16) + '-' + json.id.slice(16, 20) + '-' + json.id.slice(20, 32);
     }
 
     static async getUsername(uuid) {
