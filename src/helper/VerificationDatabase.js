@@ -48,6 +48,8 @@ export class Database {
         await connection.execute('UPDATE verification SET uuid = ? WHERE discordid = ?', [uuid, discordId]);
         await connection.execute('UPDATE verification SET code = NULL WHERE discordid = ?', [discordId]);
         connection.end();
+
+        return true;
     }
 
     static async unlinkUser(discordId) {
@@ -56,11 +58,13 @@ export class Database {
 
         await connection.execute('DELETE FROM verification WHERE discordid = ?', [discordId]);
         connection.end();
+
+        return true;
     }
 
     static async hasUser(discordId) {
         const connection = await this.connect();
-        if (!connection) return undefined;
+        if (!connection) return 'no-connection';
 
         const [res] = await connection.execute('SELECT * FROM verification WHERE discordid = ?', [discordId]);
         connection.end();

@@ -14,18 +14,28 @@ export default {
     },
     async execute(interaction) {
         await interaction.deferReply();
-        if (!await VerificationDatabase.hasUser(interaction.user.id)) {
-            await interaction.editReply({
+        const hasUser = await VerificationDatabase.hasUser(interaction.user.id);
+        if (hasUser === 'no-connection') {
+            return interaction.editReply({
+                embeds: [new EmbedBuilder().setColor('#df0000').setDescription('The verification database can\'t be reached! Please try again later!')],
+            });
+        } else if (!hasUser) {
+            return interaction.editReply({
                 embeds: [new EmbedBuilder().setColor('#df0000').setDescription('Your Discord Account is not linked to any Minecraft Account!')],
             });
-            return;
+        }
+
+        const success = await VerificationDatabase.unlinkUser(interaction.user.id);
+
+        if (!success) {
+            return interaction.editReply({
+                embeds: [new EmbedBuilder().setColor('#df0000').setDescription('The unlinking process failed! Please try again later!')],
+            });
         }
 
         await interaction.editReply({
             embeds: [new EmbedBuilder().setColor('#df0000').setDescription('Your Discord Account has been unlinked from your Minecraft Account.')],
         });
-
-        await VerificationDatabase.unlinkUser(interaction.user.id);
 
         const verifiedRole = JSON.parse(readFileSync(resolve('./src/config/roles.json'))).verified;
         await interaction.guild.members.fetch(interaction.user.id).then(member => {

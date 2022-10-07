@@ -35,17 +35,22 @@ export default {
         const uuid = await Minecraft.getUUID(username);
 
         if (!uuid) {
-            await interaction.editReply({
-                content: 'Invalid username.',
+            return interaction.editReply({
+                embeds: [new EmbedBuilder().setColor('#df0000').setDescription('Invalid username.')],
             });
-            return;
+        }
+
+        const success = await VerificationDatabase.linkUser(user.id, uuid);
+
+        if (!success) {
+            return interaction.editReply({
+                embeds: [new EmbedBuilder().setColor('#df0000').setDescription('The verification database is currently not available. Please try again later.')],
+            });
         }
 
         await interaction.editReply({
             embeds: [new EmbedBuilder().setColor('#df0000').setDescription(`<@${user.id}> has been linked to username **${username}**.`)],
         });
-
-        await VerificationDatabase.linkUser(user.id, uuid.uuid);
 
         const verifiedRole = JSON.parse(readFileSync(resolve('./src/config/roles.json'))).verified;
         await interaction.guild.members.fetch(user.id).then(member => {
