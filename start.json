@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "name": "DirtBot",
+      "script": "npm",
+      "args" : "run start"
+    },
+    {
+      "name": "DirtBot - Frontend",
+      "script": "npm",
+      "args" : "run server"
+    }
+  ]
+}
