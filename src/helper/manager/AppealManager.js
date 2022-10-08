@@ -1,6 +1,6 @@
 import { ChannelType, PermissionFlagsBits } from 'discord-api-types/v10';
 import { ActionRowBuilder, EmbedBuilder } from 'discord.js';
-import { readFileSync, writeFileSync } from 'fs';
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { Client } from '../../../index.js';
@@ -196,5 +196,19 @@ export class AppealManager {
         const appealLogId = JSON.parse(readFileSync(resolve('./src/config/channels.json')))['appealLogChannel'];
         const logChannel = Client.channels.cache.get(appealLogId);
         await logChannel.send({ embeds: [embed] });
+    }
+
+    static hasOpenAppeal(userId, type) {
+        const appealPath = resolve('./appeals');
+        const files = readdirSync(appealPath).filter(f => f.endsWith('.json'));
+
+        for (const file of files) {
+            const data = JSON.parse(readFileSync(resolve(appealPath, file)));
+            if (data.userDiscordId === userId && data.type === type) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

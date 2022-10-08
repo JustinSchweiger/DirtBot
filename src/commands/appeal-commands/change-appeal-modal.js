@@ -65,7 +65,7 @@ export default {
                 .addFields([
                     {
                         name: '__**User**__',
-                        value: `<@${interaction.user.id}>\n\u200b`,
+                        value: `<@${appeal.userDiscordId}>\n\u200b`,
                         inline: true,
                     },
                     {

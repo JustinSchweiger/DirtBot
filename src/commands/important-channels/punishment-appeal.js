@@ -1,5 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 import { Extra } from '../../helper/Extra.js';
+import { AppealManager } from '../../helper/manager/AppealManager.js';
 import PunishmentAppealModal from './punishment-appeal-modal.js';
 
 export default {
@@ -48,8 +49,16 @@ export default {
         const customId = interaction.customId;
 
         if (customId === 'ban-appeal') {
+            if (AppealManager.hasOpenAppeal(interaction.user.id, 'ban')) {
+                return interaction.reply({ embeds: [new EmbedBuilder().setColor('#df0000').setDescription('You can only have one open appeal at a time!')], ephemeral: true });
+            }
+
             PunishmentAppealModal.type = 'ban';
             return PunishmentAppealModal.showModal(interaction);
+        }
+
+        if (AppealManager.hasOpenAppeal(interaction.user.id, 'mute')) {
+            return interaction.reply({ embeds: [new EmbedBuilder().setColor('#df0000').setDescription('You can only have one open appeal at a time!')], ephemeral: true });
         }
 
         PunishmentAppealModal.type = 'mute';
