@@ -14,6 +14,6 @@ app.get('/', (req, res) => {
     return res.sendFile(resolve(`./transcripts/${transcript}.html`));
 });
 
-app.listen(1234, () => {
+app.listen(process.env.FRONTEND_PORT, () => {
     console.log(`Server listening at ${process.env.FRONTEND_URL}`);
 });

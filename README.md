@@ -6,7 +6,7 @@
 4. Install the dependencies: `npm install`
 5. Install pm2 globally: `npm install pm2 -g`
 6. Use `nano .env` and input the secrets.
-7. Run the deployment script: `npm run deploy`
+7. Run the deployment script: `bash deploy.sh`
 
 ## How to Update:
 
