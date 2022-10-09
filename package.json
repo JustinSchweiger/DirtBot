@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node -r dotenv/config index.js",
-    "server": "node -r dotenv/config ./server/server.js"
+    "server": "node -r dotenv/config ./server/server.js",
+    "test-database-connectivity": "node -r dotenv/config ./src/helper/TestDatabaseConnections.js"
   },
   "author": "DeJustinHD",
   "license": "ISC",
