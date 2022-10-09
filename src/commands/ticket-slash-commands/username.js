@@ -34,6 +34,6 @@ export default {
 
         await interaction.editReply({ content: `Changed username to \`${newUsername}\`!`, ephemeral: true });
 
-        await TicketManager.changeUsername(newUsername, uuid.uuid, channel, interaction.member.user);
+        await TicketManager.changeUsername(newUsername, uuid, channel, interaction.member.user);
     },
 };

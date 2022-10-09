@@ -332,7 +332,7 @@ export class TicketManager {
 
         writeFileSync(resolve(`./tickets/${channel.id}.json`), JSON.stringify(updatedTicket, null, 2));
 
-        await this.changeEmbed(channel, ticket, 'username', { username, uuid });
+        await this.changeEmbed(channel, ticket, 'username', { username: username, uuid: uuid });
         await this.logTicketChange('username', {
             old: `[${ticket.username}](https://namemc.com/profile/${ticket.uuid})`,
             new: `[${username}](https://namemc.com/profile/${uuid})`,
