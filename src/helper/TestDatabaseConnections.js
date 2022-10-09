@@ -1,8 +1,9 @@
 import mysql from 'mysql2/promise';
 
 (async () => {
+    let verificationDB;
     try {
-        await mysql.createConnection({
+        verificationDB = await mysql.createConnection({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
@@ -12,10 +13,13 @@ import mysql from 'mysql2/promise';
         console.log('❌ The verification database can\'t be reached!');
     }
 
-    console.log('✅ The verification database can be reached!');
+    if (verificationDB) {
+        console.log('✅ The verification database can be reached!');
+    }
 
+    let punishmentDB;
     try {
-        await mysql.createConnection({
+        punishmentDB = await mysql.createConnection({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
@@ -25,5 +29,7 @@ import mysql from 'mysql2/promise';
         console.log('❌ The punishment database can\'t be reached!');
     }
 
-    console.log('✅ The punishment database can be reached!');
+    if (punishmentDB) {
+        console.log('✅ The punishment database can be reached!');
+    }
 })();
