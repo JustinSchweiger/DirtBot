@@ -6,7 +6,9 @@
 4. Install the dependencies: `npm install`
 5. Install pm2 globally: `npm install pm2 -g`
 6. Use `nano .env` and input the secrets.
-7. Run the deployment script: `bash deploy.sh`
+7. Test your database-connections with `npm run test-database-connectivity`
+8. Run the deployment script: `bash deploy.sh`
+9. Use the `/setup <channels|roles|messages>` command to set up the bot.
 
 ## How to Update:
 
