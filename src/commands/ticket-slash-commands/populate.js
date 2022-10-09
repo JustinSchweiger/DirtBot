@@ -72,6 +72,6 @@ export default {
             await interaction.followUp({ content: `Changed username to \`${newUsername}\`!`, ephemeral: true });
         }
 
-        await TicketManager.populateTicket(newServer, newTicketName, newUsername, uuid.uuid, channel, interaction.member.user);
+        await TicketManager.populateTicket(newServer, newTicketName, newUsername, uuid, channel, interaction.member.user);
     },
 };
