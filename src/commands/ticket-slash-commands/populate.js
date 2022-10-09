@@ -4,6 +4,7 @@ import { resolve } from 'path';
 import { File } from '../../helper/GetFileFromGitlab.js';
 import { TicketManager } from '../../helper/manager/TicketManager.js';
 import { Minecraft } from '../../helper/Minecraft.js';
+import { TicketNotificationFiles } from '../../helper/TicketNotificationFiles.js';
 
 export default {
     async getChoices() {
@@ -63,6 +64,7 @@ export default {
             return;
         }
 
+        await TicketNotificationFiles.serve();
         const notifications = JSON.parse(readFileSync(resolve(`./ticket-notifications/${newServer}.json`)));
         await interaction.reply(notifications.map(notification => `<@${notification}>`).join(' ') || 'No one is subscribed to this server :(');
 

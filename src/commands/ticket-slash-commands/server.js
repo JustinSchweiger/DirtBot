@@ -3,6 +3,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { File } from '../../helper/GetFileFromGitlab.js';
 import { TicketManager } from '../../helper/manager/TicketManager.js';
+import { TicketNotificationFiles } from '../../helper/TicketNotificationFiles.js';
 
 export default {
     async getChoices() {
@@ -40,6 +41,7 @@ export default {
 
         const newServer = interaction.options.getString('server');
 
+        await TicketNotificationFiles.serve();
         const notifications = JSON.parse(readFileSync(resolve(`./ticket-notifications/${newServer}.json`)));
         await interaction.reply(notifications.map(notification => `<@${notification}>`).join(' ') || '```There is no staff this server :(```');
 

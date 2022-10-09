@@ -1,8 +1,10 @@
 import { existsSync, readdirSync, unlinkSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
+import { File } from './GetFileFromGitlab.js';
 
 export class TicketNotificationFiles {
-    static async serve(ticketNotifications) {
+    static async serve() {
+        const ticketNotifications = JSON.parse(await File.get('ticket-notifications.json'));
         for (const notification of ticketNotifications) {
             const filePath = resolve(`./ticket-notifications/${notification['short']}.json`);
 

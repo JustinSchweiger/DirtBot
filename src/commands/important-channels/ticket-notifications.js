@@ -53,7 +53,7 @@ export default {
     async execute(interaction) {
         const filePath = resolve('./ticket-notifications');
         const ticketNotifications = JSON.parse(await File.get('ticket-notifications.json'));
-        await TicketNotificationFiles.serve(ticketNotifications);
+        await TicketNotificationFiles.serve();
 
         const customId = interaction.customId.replace('ticket-notification-', '');
         const memberId = interaction.member.id;
