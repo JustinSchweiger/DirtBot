@@ -9,6 +9,7 @@ import review from '../../commands/slash-commands/review.js';
 import { Extra } from '../Extra.js';
 import { File } from '../GetFileFromGitlab.js';
 import { Minecraft } from '../Minecraft.js';
+import { TicketNotificationFiles } from '../TicketNotificationFiles.js';
 
 export class TicketManager {
     static async createNewTicket(interaction, username, problem, author, uuid, shortDescription) {
@@ -544,6 +545,7 @@ export class TicketManager {
         const ticket = JSON.parse(readFileSync(resolve(`./tickets/${channel.id}.json`)));
         const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
         const currentServer = ticket.server;
+        await TicketNotificationFiles.serve();
 
         if (level === 'admin') {
             if (!currentServer) {
