@@ -25,29 +25,11 @@ export default {
                 .setName('label')
                 .setDescription('The label to use for the role.')
                 .setRequired(true),
-        ).addStringOption(
+        ).addChannelOption(
             option => option
-                .setName('style')
-                .setDescription('The style to use for the button.')
-                .setRequired(true)
-                .addChoices(
-                    {
-                        name: 'Primary',
-                        value: 'Primary',
-                    },
-                    {
-                        name: 'Secondary',
-                        value: 'Secondary',
-                    },
-                    {
-                        name: 'Success',
-                        value: 'Success',
-                    },
-                    {
-                        name: 'Danger',
-                        value: 'Danger',
-                    },
-                ),
+                .setName('gamechat-channel')
+                .setDescription('The gamechat channel unlocked by this role.')
+                .setRequired(true),
         ),
     extra: {
         hidden: false,
@@ -57,7 +39,7 @@ export default {
         const role = interaction.options.getRole('role');
         const emoji = interaction.options.getString('emoji');
         const label = interaction.options.getString('label');
-        const style = interaction.options.getString('style');
+        const gamechatChannel = interaction.options.getChannel('gamechat-channel');
 
         if (!existsSync(resolve('./assets/role-assignments.json'))) {
             writeFileSync(resolve('./assets/role-assignments.json'), JSON.stringify([]));
@@ -77,7 +59,7 @@ export default {
             role: role.id,
             emoji: emoji,
             label: label,
-            style: style,
+            channel: gamechatChannel.id,
         });
         writeFileSync(resolve('./assets/role-assignments.json'), JSON.stringify(roleAssignments, null, 2));
 

@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Client } from '../../../index.js';
@@ -18,7 +18,7 @@ export default {
             return new ButtonBuilder()
                 .setCustomId(role['role'])
                 .setLabel(role['label'])
-                .setStyle(role['style'])
+                .setStyle(ButtonStyle.Secondary)
                 .setEmoji(role['emoji']);
         });
 
@@ -60,7 +60,14 @@ export default {
             interaction.reply({ embeds: [new EmbedBuilder().setColor('#df0000').setDescription(`Removed role ${role['emoji']} ${roleToAdd}`)], ephemeral: true });
         } else {
             interaction.member.roles.add(roleToAdd);
-            interaction.reply({ embeds: [new EmbedBuilder().setColor('#df0000').setDescription(`Added role ${role['emoji']} ${roleToAdd}`)], ephemeral: true });
+            interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor('#df0000')
+                        .setDescription(`Added role ${role['emoji']} ${roleToAdd}\nYou now have access to the <#${role['channel']}> channel!`),
+                ],
+                ephemeral: true,
+            });
         }
     },
 };
