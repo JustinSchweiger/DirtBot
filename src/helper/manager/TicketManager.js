@@ -424,12 +424,12 @@ export class TicketManager {
         updatedTicket.closedReason = reason;
         writeFileSync(resolve(`./tickets/${channel.id}.json`), JSON.stringify(updatedTicket, null, 2));
 
-        let category = await Client.channels.cache.find(c => c.name === '🎫 Pending Review');
+        let category = await Client.channels.cache.find(c => c.name === '🎫 Pending Close');
 
         if (!category) {
             await channel.guild.channels.create({
                 type: ChannelType.GuildCategory,
-                name: '🎫 Pending Review',
+                name: '🎫 Pending Close',
                 permissionOverwrites: [
                     {
                         id: channel.guild.roles.everyone,
@@ -443,7 +443,7 @@ export class TicketManager {
             });
         }
 
-        category = await Client.channels.cache.find(c => c.name === '🎫 Pending Review');
+        category = await Client.channels.cache.find(c => c.name === '🎫 Pending Close');
         await channel.setParent(category.id, { lockPermissions: false });
     }
 
