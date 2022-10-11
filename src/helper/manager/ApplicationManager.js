@@ -27,6 +27,18 @@ export class ApplicationManager {
                     allow: [PermissionFlagsBits.ViewChannel],
                 },
                 {
+                    id: roles['admin'],
+                    allow: [PermissionFlagsBits.ViewChannel],
+                },
+                {
+                    id: roles['manager'],
+                    allow: [PermissionFlagsBits.ViewChannel],
+                },
+                {
+                    id: roles['owner'],
+                    allow: [PermissionFlagsBits.ViewChannel],
+                },
+                {
                     id: interaction.user.id,
                     allow: [PermissionFlagsBits.ViewChannel],
                 },
@@ -119,6 +131,18 @@ export class ApplicationManager {
                 },
                 {
                     id: roles['moderator'],
+                    allow: [PermissionFlagsBits.ViewChannel],
+                },
+                {
+                    id: roles['admin'],
+                    allow: [PermissionFlagsBits.ViewChannel],
+                },
+                {
+                    id: roles['manager'],
+                    allow: [PermissionFlagsBits.ViewChannel],
+                },
+                {
+                    id: roles['owner'],
                     allow: [PermissionFlagsBits.ViewChannel],
                 },
                 {

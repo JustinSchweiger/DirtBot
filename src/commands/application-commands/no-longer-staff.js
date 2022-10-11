@@ -12,7 +12,7 @@ export default {
     GetButton() {
         return new ButtonBuilder()
                 .setCustomId('no-longer-staff')
-                .setLabel('I am not longer interested in becoming staff!')
+                .setLabel('I am no longer interested in becoming staff!')
                 .setStyle(ButtonStyle.Secondary)
                 .setEmoji('❌');
     },
