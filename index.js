@@ -7,30 +7,35 @@ import { fileURLToPath } from 'url';
 import { LoadCommands } from './src/helper/LoadCommands.js';
 import { TicketManager } from './src/helper/manager/TicketManager.js';
 
-new CronJob(
-    '0 * * * * *',
-    async () => {
-        const ticketsPath = resolve('./tickets');
-        const compareDate = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+try {
+    new CronJob(
+        '0 * * * * *',
+        async () => {
+            const ticketsPath = resolve('./tickets');
+            const compareDate = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
-        const ticketsToClose = readdirSync(ticketsPath)
-            .filter(file => file.endsWith('.json') && file !== '#####.json')
-            .filter(file => {
-                const json = JSON.parse(readFileSync(resolve(ticketsPath, file)));
-                return json.closed.length > 0;
-            }).filter(file => {
-                const json = JSON.parse(readFileSync(resolve(ticketsPath, file)));
-                return new Date(json.closed).toISOString() < compareDate;
-            });
+            const ticketsToClose = readdirSync(ticketsPath)
+                .filter(file => file.endsWith('.json') && file !== '#####.json')
+                .filter(file => {
+                    const json = JSON.parse(readFileSync(resolve(ticketsPath, file)));
+                    return json.closed.length > 0;
+                }).filter(file => {
+                    const json = JSON.parse(readFileSync(resolve(ticketsPath, file)));
+                    return new Date(json.closed).toISOString() < compareDate;
+                });
 
-        for (const ticket of ticketsToClose) {
-            const channel = await client.channels.fetch(ticket.replace('.json', ''));
-            await TicketManager.closeTicket(channel);
-        }
-    },
-    null,
-    true,
-);
+            for (const ticket of ticketsToClose) {
+                const channel = await client.channels.fetch(ticket.replace('.json', ''));
+                await TicketManager.closeTicket(channel);
+            }
+        },
+        null,
+        true,
+    );
+} catch (e) {
+    console.error(e);
+}
+
 
 const client = new Client({
     intents: [
