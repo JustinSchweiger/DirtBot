@@ -7,8 +7,6 @@ import { fileURLToPath } from 'url';
 import { LoadCommands } from './src/helper/LoadCommands.js';
 import { TicketManager } from './src/helper/manager/TicketManager.js';
 
-unlinkSync(resolve('./testfile.json'));
-
 try {
     new CronJob(
         '0 * * * * *',
@@ -27,7 +25,14 @@ try {
                 });
 
             for (const ticket of ticketsToClose) {
-                const channel = await client.channels.fetch(ticket.replace('.json', ''));
+                let channel;
+                try {
+                    channel = await client.channels.fetch(ticket.replace('.json', ''));
+                } catch (e) {
+                    unlinkSync(resolve(ticketsPath, ticket));
+                    continue;
+                }
+
                 await TicketManager.closeTicket(channel);
             }
         },
