@@ -5,6 +5,7 @@ import { readdirSync, readFileSync, unlinkSync } from 'fs';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { LoadCommands } from './src/helper/LoadCommands.js';
+import { Level, Logger } from './src/helper/Logger.js';
 import { TicketManager } from './src/helper/manager/TicketManager.js';
 
 try {
@@ -30,6 +31,7 @@ try {
                     channel = await client.channels.fetch(ticket.replace('.json', ''));
                 } catch (e) {
                     unlinkSync(resolve(ticketsPath, ticket));
+                    await Logger.log('Found an old ticket file that didnt get deleted. Deleting it now ...', Level.ERROR);
                     continue;
                 }
 
