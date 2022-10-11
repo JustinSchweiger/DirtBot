@@ -1,11 +1,13 @@
 import { Gitlab } from '@gitbeaker/node';
 import { CronJob } from 'cron';
 import { ActivityType, Client, IntentsBitField, MessageType } from 'discord.js';
-import { readdirSync, readFileSync } from 'fs';
+import { readdirSync, readFileSync, unlinkSync } from 'fs';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { LoadCommands } from './src/helper/LoadCommands.js';
 import { TicketManager } from './src/helper/manager/TicketManager.js';
+
+unlinkSync(resolve('./testfile.json'));
 
 try {
     new CronJob(
