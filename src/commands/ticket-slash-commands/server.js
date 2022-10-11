@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { EmbedBuilder } from 'discord.js';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { File } from '../../helper/GetFileFromGitlab.js';
@@ -29,6 +30,11 @@ export default {
                 .setDescription('The server to change to.')
                 .setRequired(true)
                 .addChoices({ name: 'server', value: 'server' }),
+        ).addBooleanOption(
+            option => option
+                .setName('ping')
+                .setDescription('Whether to ping the staff of the server.')
+                .setRequired(false),
         ),
     extra: {
         hidden: false,
@@ -40,10 +46,22 @@ export default {
         if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;
 
         const newServer = interaction.options.getString('server');
+        const ping = interaction.options.getBoolean('ping') ?? true;
 
         await TicketNotificationFiles.serve();
         const notifications = JSON.parse(readFileSync(resolve(`./ticket-notifications/${newServer}.json`)));
-        await interaction.reply(notifications.map(notification => `<@${notification}>`).join(' ') || '```There is no staff this server :(```');
+
+        if (ping) {
+            await interaction.reply(notifications.map(notification => `<@${notification}>`).join(' ') || '```There is no staff this server :(```');
+        } else {
+            await interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor('#df0000')
+                        .setDescription(notifications.map(notification => `<@${notification}>`).join(' ') || '```There is no staff this server :(```'),
+                ],
+            });
+        }
 
         const channel = interaction.guild.channels.cache.get(interaction.channel.id);
 
