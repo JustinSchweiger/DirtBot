@@ -7,7 +7,6 @@ export default {
     data: new SlashCommandBuilder()
         .setName('close')
         .setDescription('Sends a reason and closes the ticket after 24 hours.')
-        .setDefaultMemberPermissions(0)
         .addStringOption(
             option => option
                 .setName('reason')
