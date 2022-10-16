@@ -7,6 +7,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('close')
         .setDescription('Sends a reason and closes the ticket after 24 hours.')
+        .setDefaultMemberPermissions(0)
         .addStringOption(
             option => option
                 .setName('reason')
@@ -56,11 +57,11 @@ export default {
         ticketCommand: true,
     },
     async execute(interaction) {
-        if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;
-
         const channel = interaction.guild.channels.cache.get(interaction.channel.id);
 
         if (!interaction.customId) {
+            if (!await TicketManager.hasPermsAndIsTicket(interaction, false)) return;
+
             await interaction.reply({
                 embeds: [...await this.getEmbeds(interaction)],
                 components: [await this.getButtons()],
