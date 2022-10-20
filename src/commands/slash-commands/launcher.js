@@ -21,7 +21,7 @@ export default {
         const embed = new EmbedBuilder()
             .setColor('#df0000')
             .setTitle(`${extra['bulletpoint']} DirtCraft Launcher ${extra['bulletpoint']}`)
-            .setDescription(`${launcher['isBroken'] ? 'The launcher is **currently broken** due to changes from CurseForge/FTB.\nPlease use their official launchers or [**PolyMC**](https://polymc.org/) for the time being.\n' : ''}` +
+            .setDescription(`${launcher['isBroken'] ? 'The launcher is **currently broken** due to changes from CurseForge/FTB.\nPlease use their official launchers or [**PrismLauncher**](https://prismlauncher.org/) for the time being.\n' : ''}` +
                 '\n' +
                 '__**Windows Installer**__\n' +
                 `[**64-Bit**](${launcher['x64']})\n` +
