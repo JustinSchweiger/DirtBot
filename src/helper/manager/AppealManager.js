@@ -99,7 +99,7 @@ export class AppealManager {
                     },
                     {
                         name: '__**Punishment Type**__',
-                        value: punishmentData.type === 'ban' ? '🚫 Ban' : '🔇 Mute' + '\n\u200b',
+                        value: type === 'ban' ? '🚫 Ban' : '🔇 Mute' + '\n\u200b',
                         inline: true,
                     },
                     {
