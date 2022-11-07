@@ -158,6 +158,11 @@ export default {
                         .setName('applications')
                         .setDescription('The channel in which to send the application embed.')
                         .setRequired(true),
+                ).addChannelOption(
+                    option => option
+                        .setName('player-count')
+                        .setDescription('The channel for the player count.')
+                        .setRequired(true),
                 ),
         ),
     extra: {
@@ -242,6 +247,7 @@ export default {
                 'roleAssignmentChannel': interaction.options.getChannel('role-assignment').id,
                 'infoChannel': interaction.options.getChannel('info').id,
                 'applicationChannel': interaction.options.getChannel('applications').id,
+                'playerCountChannel': interaction.options.getChannel('player-count').id,
             };
 
             writeFileSync(resolve('./src/config/channels.json'), JSON.stringify(channelIds, null, 2));

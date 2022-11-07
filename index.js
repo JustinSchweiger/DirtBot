@@ -1,50 +1,12 @@
 import { Gitlab } from '@gitbeaker/node';
+import chalk from 'chalk';
 import { CronJob } from 'cron';
 import { ActivityType, Client, IntentsBitField, MessageType } from 'discord.js';
-import { readdirSync, readFileSync, unlinkSync } from 'fs';
-import { resolve } from 'path';
-import { fileURLToPath } from 'url';
+import { readdirSync } from 'fs';
+import { join as joinPath } from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { LoadCommands } from './src/helper/LoadCommands.js';
 import { Level, Logger } from './src/helper/Logger.js';
-import { TicketManager } from './src/helper/manager/TicketManager.js';
-
-try {
-    new CronJob(
-        '0 * * * * *',
-        async () => {
-            const ticketsPath = resolve('./tickets');
-            const compareDate = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-
-            const ticketsToClose = readdirSync(ticketsPath)
-                .filter(file => file.endsWith('.json') && file !== '#####.json')
-                .filter(file => {
-                    const json = JSON.parse(readFileSync(resolve(ticketsPath, file)));
-                    return json.closed.length > 0;
-                }).filter(file => {
-                    const json = JSON.parse(readFileSync(resolve(ticketsPath, file)));
-                    return new Date(json.closed).toISOString() < compareDate;
-                });
-
-            for (const ticket of ticketsToClose) {
-                let channel;
-                try {
-                    channel = await client.channels.fetch(ticket.replace('.json', ''));
-                } catch (e) {
-                    unlinkSync(resolve(ticketsPath, ticket));
-                    await Logger.log('Found an old ticket file that didnt get deleted. Deleting it now ...', Level.ERROR);
-                    continue;
-                }
-
-                await TicketManager.closeTicket(channel);
-            }
-        },
-        null,
-        true,
-    );
-} catch (e) {
-    console.error(e);
-}
-
 
 const client = new Client({
     intents: [
@@ -118,4 +80,26 @@ client.on('messageCreate', async (message) => {
 });
 
 client.login(process.env.TOKEN)
-    .catch((err) => console.log('[ERROR] DiscordAPI Error: ' + err));
+    .catch((err) => console.log('[ERROR] DiscordAPI Error: ' + err))
+    .then(async () => {
+        try {
+            const cronJobs = readdirSync('./src/cronjobs');
+            let jobsRegistered = 0;
+            for (const cronJob of cronJobs) {
+                const filePath = joinPath(__fileName, '..', 'src', 'cronjobs', cronJob);
+                const { default: job } = await import(pathToFileURL(filePath).href);
+                new CronJob(
+                    job.time,
+                    job.run,
+                    null,
+                    true,
+                );
+                jobsRegistered++;
+            }
+
+            console.log(chalk.yellow(`Registered ${jobsRegistered} CronJobs!`));
+            await Logger.log(`Registered ${jobsRegistered} CronJobs!`, Level.INFO);
+        } catch (e) {
+            console.error(e);
+        }
+    });
