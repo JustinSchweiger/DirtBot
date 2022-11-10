@@ -98,7 +98,7 @@ client.login(process.env.TOKEN)
             }
 
             console.log(chalk.yellow(`Registered ${jobsRegistered} CronJobs!`));
-            await Logger.log(`Registered ${jobsRegistered} CronJobs!`, Level.INFO);
+            await Logger.log(`🛠 Registered ${jobsRegistered} CronJobs!`, Level.INFO);
         } catch (e) {
             console.error(e);
         }

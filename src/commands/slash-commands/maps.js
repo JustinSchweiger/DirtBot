@@ -20,22 +20,12 @@ export default {
         const stats = statSync(mapsPath);
         const date = new Date(stats.mtime);
 
-        const maps = [
-            {
-                name: '__Modpack__',
-                value: mapsJson
-                    .map(map => `[**${map['server']}**](${map['link']})`)
-                    .join('\n'),
-                inline: true,
-            },
-            {
-                name: '__Date__',
-                value: mapsJson
-                    .map(map => map['date'])
-                    .join('\n'),
-                inline: true,
-            },
-        ];
+        const maps = mapsJson.map(map => {
+            return {
+                name: `__**${map['server']}**__`,
+                value: map['links'].map(link => `🗺 [${link['date']}](${link['link']})`).join('\n'),
+            };
+        });
 
         const extra = await Extra.get();
 

@@ -18,7 +18,7 @@ export default {
         const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
         const embed = new EmbedBuilder()
             .setColor('#df0000')
-            .setTitle(`${extra['bulletpoint']} DirtCraft Limits ${extra['bulletpoint']}`)
+            .setTitle(`${extra['bulletpoint']} DirtCraft Verification Info ${extra['bulletpoint']}`)
             .setDescription(`You can link your Minecraft and Discord account in <#${channels.verificationChannel}>.\n` +
                 '\n' +
                 '**Doing so will get you the following perks:**\n' +

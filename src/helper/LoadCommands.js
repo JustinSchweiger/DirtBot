@@ -56,7 +56,7 @@ export class LoadCommands {
 
 
         console.log(chalk.yellow(`Registering ${commandsAmount} commands ...`));
-        await Logger.log(`Registering ${commandsAmount} commands ...`, Level.INFO);
+        await Logger.log(`🔄 Registering ${commandsAmount} commands ...`, Level.INFO);
         await RegisterExtraCommands.ticketNotifications();
         await RegisterExtraCommands.support();
         await RegisterExtraCommands.ticketModal();
@@ -74,7 +74,7 @@ export class LoadCommands {
                 { body: commands })
                 .then(async () => {
                     console.log(chalk.green('Commands successfully registered.'));
-                    await Logger.log('Commands successfully registered.', Level.INFO);
+                    await Logger.log('✅ Commands successfully registered.', Level.INFO);
                 })
                 .catch((err) => {
                         console.error(err);
