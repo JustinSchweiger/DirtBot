@@ -1,4 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
 import { AppealManager } from '../../helper/manager/AppealManager.js';
 import PunishmentAppealModal from './punishment-appeal-modal.js';
@@ -47,6 +49,19 @@ export default {
     },
     async execute(interaction) {
         const customId = interaction.customId;
+
+        const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
+
+        if (interaction.member.roles.cache.get(roles.noAppeals)) {
+            return interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor('#df0000')
+                        .setDescription('You are not allowed to make new appeals!'),
+                ],
+                ephemeral: true,
+            });
+        }
 
         if (customId === 'ban-appeal') {
             if (AppealManager.hasOpenAppeal(interaction.user.id, 'ban')) {

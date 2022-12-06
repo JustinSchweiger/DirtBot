@@ -1,4 +1,6 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { Extra } from '../../helper/Extra.js';
 import DevAppModal from './dev-app-modal.js';
 import StaffAppModal from './staff-app-modal.js';
@@ -64,6 +66,19 @@ export default {
     },
     async execute(interaction) {
         const customId = interaction.customId;
+
+        const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
+
+        if (interaction.member.roles.cache.get(roles.noApplications)) {
+            return interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor('#df0000')
+                        .setDescription('You are not allowed to make new applications!'),
+                ],
+                ephemeral: true,
+            });
+        }
 
         if (customId === 'staff-app') {
             await StaffAppModal.showModal(interaction);

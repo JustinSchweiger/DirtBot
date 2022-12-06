@@ -67,6 +67,21 @@ export default {
                         .setName('owner')
                         .setDescription('The Owner role.')
                         .setRequired(true),
+                ).addRoleOption(
+                    option => option
+                        .setName('no-appeals')
+                        .setDescription('If a player has this role, they will not be able to appeal.')
+                        .setRequired(true),
+                ).addRoleOption(
+                    option => option
+                        .setName('no-tickets')
+                        .setDescription('If a player has this role, they will not be able to create tickets.')
+                        .setRequired(true),
+                ).addRoleOption(
+                    option => option
+                        .setName('no-applications')
+                        .setDescription('If a player has this role, they will not be able to create applications.')
+                        .setRequired(true),
                 ),
         )
         .addSubcommand(
@@ -195,6 +210,9 @@ export default {
                 networkAdmin: interaction.options.getRole('network-admin').id,
                 manager: interaction.options.getRole('manager').id,
                 owner: interaction.options.getRole('owner').id,
+                noAppeals: interaction.options.getRole('no-appeals').id,
+                noTickets: interaction.options.getRole('no-tickets').id,
+                noApplications: interaction.options.getRole('no-applications').id,
             };
 
             writeFileSync(resolve('./src/config/roles.json'), JSON.stringify(roles, null, 2));

@@ -48,6 +48,19 @@ export default {
             .setFooter({ text: 'Thank you for using our ticket system!', iconURL: extra['footer-icon'] });
     },
     async execute(interaction) {
+        const roles = JSON.parse(readFileSync(resolve('./src/config/roles.json')));
+
+        if (interaction.member.roles.cache.get(roles.noTickets)) {
+            return interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor('#df0000')
+                        .setDescription('You are not allowed to make new tickets!'),
+                ],
+                ephemeral: true,
+            });
+        }
+
         await TicketModal.showModal(interaction);
     },
 };
