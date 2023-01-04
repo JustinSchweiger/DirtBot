@@ -18,10 +18,10 @@ export default {
             .setDescription('If **DirtLauncher** doesn\'t work for you, you can either create a support ticket or use another launcher. \n' +
                 'This message covers what modpacks are on which launchers in the version we run.\n' +
                 '\n' +
-                'DW20/DW116/CON/INT/REV/ULT require [**FTBApp**](https://www.feed-the-beast.com/ftb-app), all other packs need [**CurseForge**](https://download.curseforge.com/), but [**PrismLauncher**](https://prismlauncher.org/) works for both.\n' +
+                'DW20/DW116/SB3/REV/ULT require [**FTBApp**](https://www.feed-the-beast.com/ftb-app), all other packs need [**CurseForge**](https://download.curseforge.com/), but [**PrismLauncher**](https://prismlauncher.org/) works for both.\n' +
                 '\n' +
-                '- Use [**FTBApp**](https://www.feed-the-beast.com/ftb-app) or [**PrismLauncher**](https://prismlauncher.org/) for Oceanblock, Direwolf20 (1.12/1.16), Continuum, Interactions, Revelation, or Ultimate Reloaded.\n' +
-                '- Use [**CurseForge**](https://download.curseforge.com/) or [**PrismLauncher**](https://prismlauncher.org/) for Glacial Awakening, FTB Infinity Evolved (1.7.10), Infinity Evolved Reloaded (1.12.2), MCEternal, Nomifactory, Pixelmon Reforged, Project Ozone 3, RLCraft, Roguelike Adventures and Dungeons, Sky Adventures, SkyFactory 3, SkyFactory 4, Sky Odyssey, Stoneblock 1, or Stoneblock 2.')
+                '- Use [**FTBApp**](https://www.feed-the-beast.com/ftb-app) or [**PrismLauncher**](https://prismlauncher.org/) for Oceanblock, Direwolf20 (1.12/1.16), Stoneblock 3, Revelation, or Ultimate Reloaded.\n' +
+                '- Use [**CurseForge**](https://download.curseforge.com/) or [**PrismLauncher**](https://prismlauncher.org/) for Glacial Awakening, FTB Infinity Evolved (1.7.10), Infinity Evolved Reloaded (1.12.2), MCEternal, Nomifactory, Pixelmon Reforged, Project Ozone 3, RLCraft, Roguelike Adventures and Dungeons, Sky Adventures, SkyFactory 3, SkyFactory 4, Sky Odyssey, Stoneblock 1, Stoneblock 2, or Vault Hunters.')
             .setFooter({ text: 'Have fun playing on our servers :)', iconURL: extra['footer-icon'] })
             .setTimestamp();
 
